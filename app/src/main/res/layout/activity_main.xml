@@ -1,0 +1,117 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/billTextView"
+        android:id="@+id/billTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/billEditText"
+        android:text="@string/billEditText"
+        android:inputType="numberDecimal"
+        android:ems="4"
+        android:layout_alignParentTop="true"
+        android:textSize="20sp"
+        android:layout_toRightOf="@+id/billTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tipAmountText"
+        android:id="@+id/tipTextView"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/billEditText"
+        android:layout_marginLeft="77dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/billEditText"
+        android:id="@+id/tipAmountTextView"
+        android:textSize="20sp"
+        android:layout_alignBottom="@+id/billEditText"
+        android:layout_toRightOf="@+id/tipTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adjustTipTextView"
+        android:id="@+id/adjustTipTextView"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/billEditText"
+        android:layout_alignParentLeft="true"
+        android:ems="4"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15"
+        android:id="@+id/tipPercentTextView"
+        android:layout_alignTop="@+id/adjustTipTextView"
+        android:layout_toRightOf="@+id/adjustTipTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/percentSign"
+        android:id="@+id/percentTextView"
+        android:layout_alignTop="@+id/tipPercentTextView"
+        android:layout_toRightOf="@+id/tipPercentTextView" />
+
+    <SeekBar
+        android:id="@+id/tipSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adjustTipTextView"
+        android:layout_centerHorizontal="true"
+        android:progress="15" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finalBillText"
+        android:id="@+id/finalBillTextView"
+        android:layout_below="@+id/tipSeekBar"
+        android:layout_alignLeft="@+id/tipTextView"
+        android:layout_alignStart="@+id/tipTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:id="@+id/finalBillAmountTextView"
+        android:layout_below="@+id/finalBillTextView"
+        android:layout_alignLeft="@+id/finalBillTextView"
+        android:layout_alignStart="@+id/finalBillTextView"
+        android:textSize="20sp" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/resetAll"
+        android:id="@+id/resetAllBttn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+
+</RelativeLayout>

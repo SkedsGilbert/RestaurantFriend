@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tip Calculator</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="billTextView">Bill</string>
+    <string name="billEditText">0.00</string>
+    <string name="tipAmountText">Tip</string>
+    <string name="adjustTipTextView">Adjust Tip</string>
+    <string name="percentSign">%</string>
+    <string name="finalBillText">Final Bill</string>
+    <string name="waitressScore">Score: </string>
+    <string name="waitressScoreNum">0.0</string>
+    <string name="addWaiterInfo">Add Waiter</string>
+    <string name="resetAll">Reset All</string>
+
+</resources>
