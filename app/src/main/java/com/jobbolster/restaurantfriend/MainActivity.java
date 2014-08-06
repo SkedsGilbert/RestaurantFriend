@@ -3,8 +3,11 @@ package com.jobbolster.restaurantfriend;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -14,7 +17,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     private double billBeforeTip;
-    private double tipAmount;
+    private int tipAmount;
     private double finalBill;
 
     EditText billBeforeTipEt;
@@ -33,11 +36,87 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //setup editable text for bill amount
         billBeforeTipEt = (EditText) findViewById(R.id.billEditText);
+        billBeforeTipEt.addTextChangedListener(billBeforeTipListener);
         finalBillTv = (TextView) findViewById(R.id.finalBillTextView);
+        resetBttn = (Button) findViewById(R.id.resetAllBttn);
+        //setup seekbar
+        adjustTipSb = (SeekBar) findViewById(R.id.tipSeekBar);
+        //setup listener
+        setBttnOnClickListener();
+        adjustTipSb.setOnSeekBarChangeListener(tipSeekBarListener);
+
+
 
     }
+
+    private TextWatcher billBeforeTipListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            try{
+                billBeforeTip = Double.parseDouble(charSequence.toString());
+            }catch (NumberFormatException nfe){
+                billBeforeTip = 0.00;
+            }
+            updateTipFinalBill();
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
+
+    private SeekBar.OnSeekBarChangeListener tipSeekBarListener = new SeekBar.OnSeekBarChangeListener(){
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            tipAmount = (adjustTipSb.getProgress());
+            tipAmountTv.setText(Integer.toString(tipAmount));
+            updateTipFinalBill();
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
+
+
+
+    private void updateTipFinalBill() {
+        double tipFromText = Double.parseDouble(tipAmountTv.getText().toString()) *.01;
+         finalBill = billBeforeTip + (billBeforeTip * tipFromText);
+        double amountToTip = finalBill - billBeforeTip;
+        amountToTipTv.setText(String.format("%.02f",amountToTip));
+        finalBillTv.setText(String.format("%.02f",finalBill));
+    }
+
+    private void setBttnOnClickListener(){
+        resetBttn.setOnClickListener(new Button.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                billBeforeTipEt.setText(String.format("%.02f", 0.00));
+                adjustTipSb.setProgress(15);
+
+            }
+        });
+    }
+
 
 
     @Override
