@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     TextView finalBillTv;
     TextView tipAmountTv;
     TextView amountToTipTv;
+    TextView tipPercentageTv;
 
     SeekBar adjustTipSb;
 
@@ -39,7 +40,9 @@ public class MainActivity extends Activity {
         //setup editable text for bill amount
         billBeforeTipEt = (EditText) findViewById(R.id.billEditText);
         billBeforeTipEt.addTextChangedListener(billBeforeTipListener);
-        finalBillTv = (TextView) findViewById(R.id.finalBillTextView);
+        finalBillTv = (TextView) findViewById(R.id.finalBillAmountTextView);
+        tipAmountTv = (TextView) findViewById(R.id.tipAmountTextView);
+        tipPercentageTv = (TextView) findViewById(R.id.tipPercentTextView);
         resetBttn = (Button) findViewById(R.id.resetAllBttn);
         //setup seekbar
         adjustTipSb = (SeekBar) findViewById(R.id.tipSeekBar);
@@ -79,7 +82,7 @@ public class MainActivity extends Activity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
             tipAmount = (adjustTipSb.getProgress());
-            tipAmountTv.setText(Integer.toString(tipAmount));
+            tipPercentageTv.setText(Integer.toString(tipAmount));
             updateTipFinalBill();
 
         }
@@ -98,10 +101,11 @@ public class MainActivity extends Activity {
 
 
     private void updateTipFinalBill() {
-        double tipFromText = Double.parseDouble(tipAmountTv.getText().toString()) *.01;
+        double tipFromText = Double.parseDouble(tipPercentageTv.getText().toString()) *.01;
          finalBill = billBeforeTip + (billBeforeTip * tipFromText);
         double amountToTip = finalBill - billBeforeTip;
-        amountToTipTv.setText(String.format("%.02f",amountToTip));
+        tipAmountTv.setText(String.format("%.02f", amountToTip));
+        System.out.print("System failed here!");
         finalBillTv.setText(String.format("%.02f",finalBill));
     }
 
