@@ -26,6 +26,7 @@
         android:ems="4"
         android:layout_alignParentTop="true"
         android:textSize="20sp"
+        android:selectAllOnFocus="true"
         android:layout_toRightOf="@+id/billTextView" />
 
     <TextView

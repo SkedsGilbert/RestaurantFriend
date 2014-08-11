@@ -1,7 +1,6 @@
 package com.jobbolster.restaurantfriend;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,11 +20,9 @@ public class MainActivity extends Activity {
     private double finalBill;
 
     EditText billBeforeTipEt;
-    EditText tipAmountEt;
 
     TextView finalBillTv;
     TextView tipAmountTv;
-    TextView amountToTipTv;
     TextView tipPercentageTv;
 
     SeekBar adjustTipSb;
@@ -82,6 +79,7 @@ public class MainActivity extends Activity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
             tipAmount = (adjustTipSb.getProgress());
+            System.out.println(tipAmount);
             tipPercentageTv.setText(Integer.toString(tipAmount));
             updateTipFinalBill();
 
@@ -105,7 +103,6 @@ public class MainActivity extends Activity {
          finalBill = billBeforeTip + (billBeforeTip * tipFromText);
         double amountToTip = finalBill - billBeforeTip;
         tipAmountTv.setText(String.format("%.02f", amountToTip));
-        System.out.print("System failed here!");
         finalBillTv.setText(String.format("%.02f",finalBill));
     }
 
