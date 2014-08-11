@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
         //setup listener
         setBttnOnClickListener();
         adjustTipSb.setOnSeekBarChangeListener(tipSeekBarListener);
-
+        //test
 
 
     }
