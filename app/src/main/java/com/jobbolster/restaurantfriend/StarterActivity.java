@@ -34,6 +34,8 @@ public class StarterActivity extends Activity {
 
             @Override
             public void onClick(View view) {
+                Intent i = new Intent(context,AddRestaurant.class);
+                startActivity(i);
 
             }
         });

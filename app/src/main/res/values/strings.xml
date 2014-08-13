@@ -17,5 +17,7 @@
     <string name="title_activity_starter">Launch App</string>
     <string name="find_server_bttn">Find a Server</string>
     <string name="tip_cal_bttn">Use Tip Calculator</string>
+    <string name="title_activity_add_restaurant">AddRestaurant</string>
+    <string name="addRestaurantNameBttn">Add Restaurant</string>
 
 </resources>
