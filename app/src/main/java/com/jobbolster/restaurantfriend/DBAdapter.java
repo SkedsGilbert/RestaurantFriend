@@ -1,6 +1,8 @@
 package com.jobbolster.restaurantfriend;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -44,8 +46,8 @@ public class DBAdapter {
 
     private static final String DATABASE_CREATE_RESTAURANT_TABLE =
             "create table " + DATABASE_TABLE_RESTAURANT_NAME
-                    + " (" + KEY_ROWID + " integer primary key autoincrement, "
-                    + KEY_RESTAURANT_NAME + " string not null "
+                    + " ("+ KEY_ROWID +" integer primary key autoincrement, "
+                    + KEY_RESTAURANT_NAME +" string not null "
                     + ");";
 
     private static final String DATABASE_CREATE_LOCATIONS_TABLE =
@@ -58,24 +60,24 @@ public class DBAdapter {
             "create table " + DATABASE_TABLE_RESTAURANTS_HAVE_LOCATIONS
                     +" (" + KEY_RESTAURANT_HAVE_ID + " integer, "
                     + KEY_LOCATIONS_HAVE_ID + " integer, "
-                    + "foreign key" + " (" + KEY_RESTAURANT_HAVE_ID + ") " + "references " + DATABASE_CREATE_RESTAURANT_TABLE
+                    + "foreign key" + " (" + KEY_RESTAURANT_HAVE_ID + ") references " + DATABASE_TABLE_RESTAURANT_NAME
                     + " (" + KEY_ROWID + "), "
-                    + "foreign key" + " (" + KEY_LOCATIONS_HAVE_ID + ") " + "references " + DATABASE_CREATE_LOCATIONS_TABLE
+                    + "foreign key" + " (" + KEY_LOCATIONS_HAVE_ID + ") references " + DATABASE_TABLE_LOCATIONS
                     + " (" + KEY_ROWID + ") "
                     + ");";
 
     private static final String DATABASE_CREATE_SERVERS_TABLE =
             "create table " + DATABASE_TABLE_SERVER
                     +" (" + KEY_ROWID + " integer primary key autoincrement, "
-                    + KEY_SERVER_NAME + "string not null, "
-                    + KEY_SERVER_LOCATION + "string,"
-                    + "foreign key" + " (" + KEY_SERVER_LOCATION + ") " + "references " + DATABASE_CREATE_LOCATIONS_TABLE
+                    + KEY_SERVER_NAME + " string not null, "
+                    + KEY_SERVER_LOCATION + " string,"
+                    + "foreign key" + " (" + KEY_SERVER_LOCATION + ") references " + DATABASE_TABLE_LOCATIONS
                     + " (" + KEY_ROWID + ") "
                     + ");";
 
     // Context of application who uses us.
 
-    private Context mcontext;
+    private Context mContext;
     private DatabaseHelper myDBHelper;
     private SQLiteDatabase db;
 
@@ -84,9 +86,55 @@ public class DBAdapter {
     /////////////////////////////////////////////////////////////////////
 
     public DBAdapter(Context ctx){
-        this.mcontext = ctx;
-        myDBHelper = new DatabaseHelper(mcontext);
+        this.mContext = ctx;
+        myDBHelper = new DatabaseHelper(mContext);
     }
+
+    // Open the database connection.
+    public DBAdapter open() {
+        db = myDBHelper.getWritableDatabase();
+        return this;
+    }
+
+    // Close the database connection.
+    public void close() {
+        myDBHelper.close();
+    }
+
+    public Long insertRestName(String restName){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_RESTAURANT_NAME,restName);
+        return db.insert(DATABASE_TABLE_RESTAURANT_NAME,null,initialValues);
+    }
+
+    public Cursor getAllRestName(){
+        Cursor c = db.rawQuery("SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME, null );
+        if (c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    /*
+         public String[] getAllRestaurantNames(){
+        Cursor cursor = this.db.query(DATABASE_TABLE,new String[]{KEY_RESTAURANT_NAME},null,
+                null,null,null,null);
+
+        if(cursor.getCount() > 0){
+
+            String[] str = new String[cursor.getCount()];
+            int i = 0;
+
+            while(cursor.moveToNext()){
+                    str[i] = cursor.getString(cursor.getColumnIndex(KEY_RESTAURANT_NAME));
+                    i++;
+               }
+            return str;
+        }else{
+            return  new String[]{};
+        }
+    }
+     */
 
     /////////////////////////////////////////////////////////////////////
     //	Private Helper Classes:
