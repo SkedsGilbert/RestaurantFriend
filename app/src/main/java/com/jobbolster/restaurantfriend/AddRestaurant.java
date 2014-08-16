@@ -4,24 +4,28 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.jobbolster.restaurantfriend.R;
 
 public class AddRestaurant extends Activity {
 
-    Context context = this;
+    Context mContext = this;
     Button addRestNameBttn;
     DBAdapter serverDB;
+    ListView addRestListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class AddRestaurant extends Activity {
         setContentView(R.layout.activity_add_restaurant);
 
         addRestNameBttn = (Button) findViewById(R.id.addRestaurantBttn);
+        addRestListView = (ListView) findViewById(R.id.restNameListView);
+
         setOnClick();
         openDB();
         populateRestaurantNameListView();
@@ -45,9 +51,9 @@ public class AddRestaurant extends Activity {
             @Override
             public void onClick(View view) {
                 openDB();
-                LayoutInflater dialogInflater = LayoutInflater.from(context);
+                LayoutInflater dialogInflater = LayoutInflater.from(mContext);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
                 alertDialogBuilder.setView(dialogView);
                 final EditText userInput = (EditText) dialogView.findViewById(R.id.addRestDialogUserInput);
 
@@ -74,6 +80,19 @@ public class AddRestaurant extends Activity {
                 alertDialog.show();
              }
         });
+
+        addRestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
+                String name = temp.getText().toString();
+                Intent intent = new Intent(mContext,AddLocation.class);
+                intent.putExtra("name",name);
+                startActivity(intent);
+
+            }
+        });
     }
 
 
@@ -94,11 +113,9 @@ public class AddRestaurant extends Activity {
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromFieldNames,toViewIDs);
 
         //Set adapter for the list view
-        ListView serverInfoListView = (ListView) findViewById(R.id.RestNameListView);
+        ListView serverInfoListView = (ListView) findViewById(R.id.restNameListView);
         serverInfoListView.setAdapter(myCursorAdapter);
     }
-
-
 
 
     @Override

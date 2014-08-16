@@ -15,7 +15,7 @@ public class StarterActivity extends Activity {
 
     Button startFindServerActivity;
     Button startTipCalculator;
-    Context context = this;
+    Context mContext = this;
 
 
 
@@ -34,7 +34,7 @@ public class StarterActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context,AddRestaurant.class);
+                Intent i = new Intent(mContext,AddRestaurant.class);
                 startActivity(i);
 
             }
@@ -44,7 +44,7 @@ public class StarterActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context,MainActivity.class);
+                Intent i = new Intent(mContext,MainActivity.class);
                 startActivity(i);
             }
         });

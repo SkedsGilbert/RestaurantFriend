@@ -108,33 +108,20 @@ public class DBAdapter {
     }
 
     public Cursor getAllRestName(){
-        Cursor c = db.rawQuery("SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME, null );
+        Cursor c = db.rawQuery("SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME + " ORDER BY " +
+                KEY_RESTAURANT_NAME + " ASC", null );
         if (c != null){
             c.moveToFirst();
         }
         return c;
     }
 
-    /*
-         public String[] getAllRestaurantNames(){
-        Cursor cursor = this.db.query(DATABASE_TABLE,new String[]{KEY_RESTAURANT_NAME},null,
-                null,null,null,null);
-
-        if(cursor.getCount() > 0){
-
-            String[] str = new String[cursor.getCount()];
-            int i = 0;
-
-            while(cursor.moveToNext()){
-                    str[i] = cursor.getString(cursor.getColumnIndex(KEY_RESTAURANT_NAME));
-                    i++;
-               }
-            return str;
-        }else{
-            return  new String[]{};
-        }
+    public Long insertLocale(String locale){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_RESTAURANT_LOCALE,locale);
+        return db.insert(DATABASE_TABLE_LOCATIONS,null,initialValues);
     }
-     */
+
 
     /////////////////////////////////////////////////////////////////////
     //	Private Helper Classes:
