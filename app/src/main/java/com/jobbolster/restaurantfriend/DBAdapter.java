@@ -108,8 +108,9 @@ public class DBAdapter {
     }
 
     public Cursor getAllRestName(){
-        Cursor c = db.rawQuery("SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME + " ORDER BY " +
-                KEY_RESTAURANT_NAME + " ASC", null );
+        String nameQuery = "SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME + " ORDER BY " +
+                KEY_RESTAURANT_NAME + " ASC";
+        Cursor c = db.rawQuery(nameQuery, null );
         if (c != null){
             c.moveToFirst();
         }
@@ -120,6 +121,16 @@ public class DBAdapter {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_RESTAURANT_LOCALE,locale);
         return db.insert(DATABASE_TABLE_LOCATIONS,null,initialValues);
+    }
+
+    public Cursor getAllLocations(){
+        String locationQuery = "SELECT * FROM " + DATABASE_TABLE_LOCATIONS + " ORDER BY "
+                + KEY_RESTAURANT_LOCALE + " ASC";
+        Cursor c = db.rawQuery(locationQuery,null);
+        if (c != null){
+            c.moveToFirst();
+        }
+        return c;
     }
 
 

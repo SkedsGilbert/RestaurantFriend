@@ -17,7 +17,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:id="@+id/RestLocationListView"
+        android:id="@+id/restLocationListView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/addLocationBttn"

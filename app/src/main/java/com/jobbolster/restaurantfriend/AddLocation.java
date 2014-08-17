@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 
@@ -20,8 +23,10 @@ public class AddLocation extends Activity {
     Context context = this;
     Button addLocationBttn;
     DBAdapter serverDB;
+    ListView addLocationListView;
 
     TextView newText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,7 @@ public class AddLocation extends Activity {
         setContentView(R.layout.activity_add_location);
         newText = (TextView) findViewById(R.id.nameRest);
         addLocationBttn = (Button) findViewById(R.id.addLocationBttn);
+        addLocationListView = (ListView) findViewById(R.id.restLocationListView);
 
         Intent i = getIntent();
         String product = i.getStringExtra("name");
@@ -36,6 +42,7 @@ public class AddLocation extends Activity {
 
         setOnClick();
         openDB();
+      populateLocationListView();
     }
 
     private void openDB(){
@@ -49,10 +56,14 @@ public class AddLocation extends Activity {
             @Override
             public void onClick(View view) {
                 openDB();
+
                 LayoutInflater dialogInflater = LayoutInflater.from(context);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                 alertDialogBuilder.setView(dialogView);
+                final TextView locationText = (TextView) dialogView.findViewById(R.id.dialogTextView);
+                System.out.println(locationText.getText().toString());
+                locationText.setText("Enter Restaurant Location");
                 final EditText userInput = (EditText) dialogView.findViewById(R.id.addRestDialogUserInput);
                 
                 alertDialogBuilder
@@ -80,8 +91,17 @@ public class AddLocation extends Activity {
     }
 
     private void populateLocationListView() {
+        Cursor cursor = serverDB.getAllLocations();
+        startManagingCursor(cursor);
+        String[] fromLocations = new String[]{DBAdapter.KEY_RESTAURANT_LOCALE};
+        int[] toViewIDs = new int[]{R.id.restNameRowTextView};
+        SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromLocations,toViewIDs);
+        ListView serverInfoListView = (ListView) findViewById(R.id.restLocationListView);
+        serverInfoListView.setAdapter(myCursorAdapter);
 
     }
+
+
 
 
     @Override

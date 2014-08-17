@@ -9,14 +9,16 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter Restaurant Name"
+        android:id="@+id/dialogTextView"
+        android:text="@string/dialogText"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <EditText
         android:id="@+id/addRestDialogUserInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords">
 
         <requestFocus />
 

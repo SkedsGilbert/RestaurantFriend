@@ -65,7 +65,10 @@ public class AddRestaurant extends Activity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 serverDB.insertRestName(userInput.getText().toString());
-                                                populateRestaurantNameListView();
+                                                String name = userInput.getText().toString();
+                                                Intent intent = new Intent(mContext,AddLocation.class);
+                                                intent.putExtra("name",name);
+                                                startActivity(intent);
                                             }
                                         })
                                 .setNegativeButton("Cancel",
@@ -84,6 +87,8 @@ public class AddRestaurant extends Activity {
         addRestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
 
                 TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
                 String name = temp.getText().toString();
