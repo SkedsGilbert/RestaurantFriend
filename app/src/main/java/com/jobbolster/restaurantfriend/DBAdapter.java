@@ -107,6 +107,16 @@ public class DBAdapter {
         return db.insert(DATABASE_TABLE_RESTAURANT_NAME,null,initialValues);
     }
 
+    public Cursor getRestID(String restName){
+        String getIDQuery = "SELECT " + KEY_ROWID + " FROM " + DATABASE_TABLE_RESTAURANT_NAME
+                + " WHERE " + KEY_RESTAURANT_NAME + " = \"" + restName + "\";";
+        Cursor c = db.rawQuery(getIDQuery,null);
+        if (c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
     public Cursor getAllRestName(){
         String nameQuery = "SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME + " ORDER BY " +
                 KEY_RESTAURANT_NAME + " ASC";

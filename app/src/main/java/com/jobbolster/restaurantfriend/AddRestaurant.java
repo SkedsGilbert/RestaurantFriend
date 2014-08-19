@@ -66,9 +66,7 @@ public class AddRestaurant extends Activity {
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 serverDB.insertRestName(userInput.getText().toString());
                                                 String name = userInput.getText().toString();
-                                                Intent intent = new Intent(mContext,AddLocation.class);
-                                                intent.putExtra("name",name);
-                                                startActivity(intent);
+                                                startIntent(name);
                                             }
                                         })
                                 .setNegativeButton("Cancel",
@@ -88,13 +86,9 @@ public class AddRestaurant extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
-
                 TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
                 String name = temp.getText().toString();
-                Intent intent = new Intent(mContext,AddLocation.class);
-                intent.putExtra("name",name);
-                startActivity(intent);
+                startIntent(name);
 
             }
         });
@@ -120,6 +114,19 @@ public class AddRestaurant extends Activity {
         //Set adapter for the list view
         ListView serverInfoListView = (ListView) findViewById(R.id.restNameListView);
         serverInfoListView.setAdapter(myCursorAdapter);
+    }
+
+    public void startIntent(String name){
+        String ID = "";
+        Cursor cursor = serverDB.getRestID(name);
+        if(cursor.moveToFirst()){
+            ID = cursor.getString(0);
+        }
+
+        Intent intent = new Intent(mContext,AddLocation.class);
+        intent.putExtra("name",name);
+        intent.putExtra("ID",ID);
+        startActivity(intent);
     }
 
 

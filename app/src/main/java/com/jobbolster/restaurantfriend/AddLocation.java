@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,29 +21,32 @@ import android.widget.TextView;
 
 public class AddLocation extends Activity {
 
-    Context context = this;
+    Context mContext = this;
     Button addLocationBttn;
     DBAdapter serverDB;
     ListView addLocationListView;
 
-    TextView newText;
+    TextView addedRestName;
+    String addedRestID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
-        newText = (TextView) findViewById(R.id.nameRest);
+        addedRestName = (TextView) findViewById(R.id.nameRest);
         addLocationBttn = (Button) findViewById(R.id.addLocationBttn);
         addLocationListView = (ListView) findViewById(R.id.restLocationListView);
 
         Intent i = getIntent();
-        String product = i.getStringExtra("name");
-        newText.setText(product);
+        String restName = i.getStringExtra("name");
+        addedRestID = i.getStringExtra("ID");
+        addedRestName.setText(restName + " ->");
+
 
         setOnClick();
         openDB();
-      populateLocationListView();
+        populateLocationListView();
     }
 
     private void openDB(){
@@ -57,9 +61,9 @@ public class AddLocation extends Activity {
             public void onClick(View view) {
                 openDB();
 
-                LayoutInflater dialogInflater = LayoutInflater.from(context);
+                LayoutInflater dialogInflater = LayoutInflater.from(mContext);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
                 alertDialogBuilder.setView(dialogView);
                 final TextView locationText = (TextView) dialogView.findViewById(R.id.dialogTextView);
                 System.out.println(locationText.getText().toString());
@@ -73,7 +77,8 @@ public class AddLocation extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         serverDB.insertLocale(userInput.getText().toString());
-                                        populateLocationListView();
+                                        String name = userInput.getText().toString();
+                                        startIntent(name);
                                     }
                                 })
                         .setNegativeButton("Cancel",
@@ -88,6 +93,16 @@ public class AddLocation extends Activity {
             }
 
         });
+
+        addLocationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
+                String name = temp.getText().toString();
+                startIntent(name);
+            }
+        });
+
     }
 
     private void populateLocationListView() {
@@ -101,6 +116,18 @@ public class AddLocation extends Activity {
 
     }
 
+    public void startIntent(String name){
+        String ID = "";
+        Cursor cursor = serverDB.getRestID(name);
+        if(cursor.moveToFirst()){
+            ID = cursor.getString(0);
+        }
+
+        Intent intent = new Intent(mContext,AddLocation.class);
+        intent.putExtra("name",name);
+        intent.putExtra("ID",ID);
+        startActivity(intent);
+    }
 
 
 
