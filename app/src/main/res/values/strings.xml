@@ -22,5 +22,7 @@
     <string name="title_activity_add_location">AddLocation</string>
     <string name="addLocationBttn">Add Location</string>
     <string name="dialogText">Enter Restaurant Name</string>
+    <string name="title_activity_add_server">AddServer</string>
+    <string name="addServerBttn">Add Server</string>
 
 </resources>

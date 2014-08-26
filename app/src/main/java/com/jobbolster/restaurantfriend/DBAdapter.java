@@ -133,6 +133,16 @@ public class DBAdapter {
         return db.insert(DATABASE_TABLE_LOCATIONS,null,initialValues);
     }
 
+    public Cursor getLocaleID(String localeName){
+        String getIDQuery = "SELECT " + KEY_ROWID + " FROM " + DATABASE_TABLE_LOCATIONS
+                + " WHERE " + KEY_RESTAURANT_LOCALE + " = \"" + localeName + "\";";
+        Cursor c = db.rawQuery(getIDQuery,null);
+        if (c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
     public Cursor getAllLocations(){
         String locationQuery = "SELECT * FROM " + DATABASE_TABLE_LOCATIONS + " ORDER BY "
                 + KEY_RESTAURANT_LOCALE + " ASC";
@@ -142,6 +152,24 @@ public class DBAdapter {
         }
         return c;
     }
+
+    public Long insertServer(String serverName){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_SERVER_NAME,serverName);
+        return db.insert(DATABASE_TABLE_SERVER,null,initialValues);
+    }
+
+    public Cursor getAllServer(){
+        String serverQuery = "SELECT * FROM " + DATABASE_TABLE_SERVER + " ORDER BY "
+                + KEY_SERVER_NAME + " ASC";
+        Cursor c = db.rawQuery(serverQuery,null);
+        if (c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+
 
 
     /////////////////////////////////////////////////////////////////////

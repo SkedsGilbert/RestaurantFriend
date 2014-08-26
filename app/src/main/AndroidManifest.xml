@@ -29,6 +29,10 @@
             android:name=".AddLocation"
             android:label="@string/title_activity_add_location" >
         </activity>
+        <activity
+            android:name=".AddServer"
+            android:label="@string/title_activity_add_server" >
+        </activity>
     </application>
 
 </manifest>

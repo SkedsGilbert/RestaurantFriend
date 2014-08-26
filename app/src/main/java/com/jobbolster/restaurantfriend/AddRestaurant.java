@@ -124,8 +124,8 @@ public class AddRestaurant extends Activity {
         }
 
         Intent intent = new Intent(mContext,AddLocation.class);
-        intent.putExtra("name",name);
-        intent.putExtra("ID",ID);
+        intent.putExtra("restNamePassed",name);
+        intent.putExtra("restIdPassed",ID);
         startActivity(intent);
     }
 

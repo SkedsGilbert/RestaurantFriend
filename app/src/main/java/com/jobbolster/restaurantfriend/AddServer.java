@@ -18,68 +18,69 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.util.List;
 
-public class AddLocation extends Activity {
+
+public class AddServer extends Activity {
 
     Context mContext = this;
-    Button addLocationBttn;
+    Button addServerBttn;
     DBAdapter serverDB;
-    ListView addLocationListView;
-
-    TextView addedRestName;
-    String addedRestID;
-    String restName;
-
+    ListView addServerListView;
+    TextView addedLocaleNameTextView;
+    String addedLocaleID;
+    String addedlocaleName;
+    String addedRestName;
+    String addedRestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_location);
-        addedRestName = (TextView) findViewById(R.id.nameRest);
-        addLocationBttn = (Button) findViewById(R.id.addLocationBttn);
-        addLocationListView = (ListView) findViewById(R.id.restLocationListView);
+        setContentView(R.layout.activity_add_server);
+
+        addServerBttn = (Button) findViewById(R.id.addServerBttn);
+        addServerListView = (ListView) findViewById(R.id.serverListView);
+        addedLocaleNameTextView = (TextView) findViewById(R.id.nameLocale);
 
         Intent i = getIntent();
-        restName = i.getStringExtra("restNamePassed");
-        addedRestID = i.getStringExtra("restIdPassed");
-        addedRestName.setText(restName + " ->");
+        addedRestName = i.getStringExtra("restNamePassed");
+        addedRestId = i.getStringExtra("restIdPassed");
+        addedlocaleName = i.getStringExtra("localeNamePassed");
+        addedLocaleID = i.getStringExtra("localeIdPassed");
+        addedLocaleNameTextView.setText(addedRestName + " --> " + addedlocaleName );
 
-
-        setOnClick();
+        setOnclick();
         openDB();
-        populateLocationListView();
+        populateServerListView();
     }
 
-    private void openDB(){
+    private void openDB() {
         serverDB = new DBAdapter(this);
         serverDB.open();
     }
 
-    private void setOnClick(){
-        addLocationBttn.setOnClickListener(new Button.OnClickListener(){
-
+    private void setOnclick(){
+        addServerBttn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openDB();
-
                 LayoutInflater dialogInflater = LayoutInflater.from(mContext);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
                 alertDialogBuilder.setView(dialogView);
-                final TextView locationText = (TextView) dialogView.findViewById(R.id.dialogTextView);
-                System.out.println(locationText.getText().toString());
-                locationText.setText("Enter Restaurant Location");
+                final TextView serverText = (TextView) dialogView.findViewById(R.id.dialogTextView);
+                serverText.setText("Enter Server Name");
                 final EditText userInput = (EditText) dialogView.findViewById(R.id.addRestDialogUserInput);
-                
+
                 alertDialogBuilder
                         .setCancelable(false)
                         .setPositiveButton("Enter",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        serverDB.insertLocale(userInput.getText().toString());
-                                        String localeName = userInput.getText().toString();
-                                        startIntent(localeName);
+                                        serverDB.insertServer(userInput.getText().toString());
+                                        String name = userInput.getText().toString();
+//                                        startIntent(name);
                                     }
                                 })
                         .setNegativeButton("Cancel",
@@ -92,53 +93,39 @@ public class AddLocation extends Activity {
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
             }
-
         });
 
-        addLocationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        addServerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
                 String name = temp.getText().toString();
-                startIntent(name);
+//                startIntent(name);
             }
         });
-
     }
 
-    private void populateLocationListView() {
-        Cursor cursor = serverDB.getAllLocations();
+    private void populateServerListView(){
+        Cursor cursor = serverDB.getAllServer();
         startManagingCursor(cursor);
-        String[] fromLocations = new String[]{DBAdapter.KEY_RESTAURANT_LOCALE};
+        String[] fromServers = new String[]{DBAdapter.KEY_SERVER_NAME};
         int[] toViewIDs = new int[]{R.id.restNameRowTextView};
-        SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromLocations,toViewIDs);
-        ListView serverInfoListView = (ListView) findViewById(R.id.restLocationListView);
+        SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromServers,toViewIDs);
+        ListView serverInfoListView = (ListView) findViewById(R.id.serverListView);
         serverInfoListView.setAdapter(myCursorAdapter);
-
     }
 
-    public void startIntent(String localeName){
-        String ID = "";
-        String localeString = localeName;
-        Cursor cursor = serverDB.getLocaleID(localeName);
-        if(cursor.moveToFirst()){
-            ID = cursor.getString(0);
-        }
-
-        Intent intent = new Intent(mContext,AddServer.class);
-        intent.putExtra("localeNamePassed",localeString);
-        intent.putExtra("localeIdPassed",ID);
-        intent.putExtra("restNamePassed",restName);
-        intent.putExtra("restIdPassed",addedRestID);
-        startActivity(intent);
-    }
-
+//    public void startIntent(String name){
+//        String ID = "";
+//        String nameString = wholeName + " -> " + name;
+//        Cursor cursor = serverDB.
+//    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_location, menu);
+        getMenuInflater().inflate(R.menu.add_server, menu);
         return true;
     }
 
