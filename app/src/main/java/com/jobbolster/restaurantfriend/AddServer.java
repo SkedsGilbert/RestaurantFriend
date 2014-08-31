@@ -38,6 +38,7 @@ public class AddServer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_server);
 
+        serverDB = new DBAdapter(this);
         addServerBttn = (Button) findViewById(R.id.addServerBttn);
         addServerListView = (ListView) findViewById(R.id.serverListView);
         addedLocaleNameTextView = (TextView) findViewById(R.id.nameLocale);
@@ -50,20 +51,19 @@ public class AddServer extends Activity {
         addedLocaleNameTextView.setText(addedRestName + " --> " + addedlocaleName );
 
         setOnclick();
-        openDB();
         populateServerListView();
     }
 
-    private void openDB() {
-        serverDB = new DBAdapter(this);
-        serverDB.open();
+    @Override
+    protected void onResume(){
+        super.onResume();
+        populateServerListView();
     }
 
     private void setOnclick(){
         addServerBttn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDB();
                 LayoutInflater dialogInflater = LayoutInflater.from(mContext);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
@@ -78,9 +78,11 @@ public class AddServer extends Activity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        serverDB.insertServer(userInput.getText().toString());
                                         String name = userInput.getText().toString();
-//                                        startIntent(name);
+                                        serverDB.openWrite();
+                                        serverDB.insertServer(name);
+                                        serverDB.closeDB();
+//                                      startIntent(name);
                                     }
                                 })
                         .setNegativeButton("Cancel",
@@ -106,8 +108,9 @@ public class AddServer extends Activity {
     }
 
     private void populateServerListView(){
-        Cursor cursor = serverDB.getAllServer();
-        startManagingCursor(cursor);
+        serverDB.openRead();
+        Cursor cursor = serverDB.getAllServer(addedRestId,addedLocaleID);
+        serverDB.closeDB();
         String[] fromServers = new String[]{DBAdapter.KEY_SERVER_NAME};
         int[] toViewIDs = new int[]{R.id.restNameRowTextView};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromServers,toViewIDs);

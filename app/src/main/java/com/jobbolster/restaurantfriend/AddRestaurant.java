@@ -32,25 +32,27 @@ public class AddRestaurant extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_restaurant);
 
+        serverDB = new DBAdapter(this);
         addRestNameBttn = (Button) findViewById(R.id.addRestaurantBttn);
         addRestListView = (ListView) findViewById(R.id.restNameListView);
 
         setOnClick();
-        openDB();
+//        openDB();
         populateRestaurantNameListView();
     }
 
-    private void openDB() {
-        serverDB = new DBAdapter(this);
-        serverDB.open();
-    }
+
+//    private void openDB() {
+//        serverDB = new DBAdapter(this);
+//        serverDB.open();
+//    }
 
     private void setOnClick() {
         addRestNameBttn.setOnClickListener(new Button.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                openDB();
+//                openDB();
                 LayoutInflater dialogInflater = LayoutInflater.from(mContext);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
@@ -64,8 +66,10 @@ public class AddRestaurant extends Activity {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                serverDB.insertRestName(userInput.getText().toString());
                                                 String name = userInput.getText().toString();
+                                                serverDB.openWrite();
+                                                serverDB.insertRestName(name);
+                                                serverDB.closeDB();
                                                 startIntent(name);
                                             }
                                         })
@@ -94,12 +98,16 @@ public class AddRestaurant extends Activity {
         });
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        populateRestaurantNameListView();
+    }
 
-        private void populateRestaurantNameListView() {
+
+    private void populateRestaurantNameListView() {
+            serverDB.openRead();
             Cursor cursor = serverDB.getAllRestName();
-
-        //Allow activity to manage lifetime of cursor
-        startManagingCursor(cursor);
 
         //Setup mapping from cursor to view fields
         String[] fromFieldNames = new String[]
@@ -114,15 +122,17 @@ public class AddRestaurant extends Activity {
         //Set adapter for the list view
         ListView serverInfoListView = (ListView) findViewById(R.id.restNameListView);
         serverInfoListView.setAdapter(myCursorAdapter);
+        serverDB.closeDB();
     }
 
     public void startIntent(String name){
         String ID = "";
+        serverDB.openRead();
         Cursor cursor = serverDB.getRestID(name);
         if(cursor.moveToFirst()){
             ID = cursor.getString(0);
         }
-
+        serverDB.closeDB();
         Intent intent = new Intent(mContext,AddLocation.class);
         intent.putExtra("restNamePassed",name);
         intent.putExtra("restIdPassed",ID);
@@ -148,4 +158,6 @@ public class AddRestaurant extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

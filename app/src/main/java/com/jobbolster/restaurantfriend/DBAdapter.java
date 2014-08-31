@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class DBAdapter {
 
     private static final String TAG = "DBAdapter";
-    public static final String KEY_ROWID = "_id";
+    public static final String KEY_ROW_ID = "_id";
     //RESTAURANT TABLE
     public static final String KEY_RESTAURANT_NAME = "NAME";
     //LOCATIONS TABLE
@@ -25,14 +25,16 @@ public class DBAdapter {
     public static final String KEY_LOCATIONS_HAVE_ID = "LOCATION_ID";
     //SERVER TABLE
     public static final String KEY_SERVER_NAME = "NAME";
-    public static final String KEY_SERVER_LOCATION = "LOCATION_ID";
+    public static final String KEY_SERVER_REST_HAVE_LOCATION = "REST_HAVE_LOC_ID";
+    public static final String KEY_SERVER_SCORE = "SCORE";
+    public static final String KEY_SERVER_SCORE_COUNT = "SCORE_COUNT";
 
     // TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
     public static final int COL_RESTAURANT_NAME = 1;
     public static final int COL_RESTAURANT_LOCALE = 2;
     public static final int COL_SERVER_NAME = 3;
 
-    public static final String[] ALL_KEYS_NAMES = new String[] {KEY_ROWID, KEY_RESTAURANT_NAME};
+    public static final String[] ALL_KEYS_NAMES = new String[] {KEY_ROW_ID, KEY_RESTAURANT_NAME};
 
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "ServerInfoDb";
@@ -46,33 +48,36 @@ public class DBAdapter {
 
     private static final String DATABASE_CREATE_RESTAURANT_TABLE =
             "create table " + DATABASE_TABLE_RESTAURANT_NAME
-                    + " ("+ KEY_ROWID +" integer primary key autoincrement, "
+                    + " ("+ KEY_ROW_ID +" integer primary key autoincrement, "
                     + KEY_RESTAURANT_NAME +" string not null "
                     + ");";
 
     private static final String DATABASE_CREATE_LOCATIONS_TABLE =
             "create table " + DATABASE_TABLE_LOCATIONS
-                    +" (" + KEY_ROWID + " integer primary key autoincrement, "
+                    +" (" + KEY_ROW_ID + " integer primary key autoincrement, "
                     + KEY_RESTAURANT_LOCALE + " string not null "
                     + ");";
 
     private static final String DATABASE_CREATE_RESTAURANTS_HAVE_LOCATION =
             "create table " + DATABASE_TABLE_RESTAURANTS_HAVE_LOCATIONS
-                    +" (" + KEY_RESTAURANT_HAVE_ID + " integer, "
+                    +" (" + KEY_ROW_ID + " integer primary key autoincrement, "
+                    + KEY_RESTAURANT_HAVE_ID + " integer, "
                     + KEY_LOCATIONS_HAVE_ID + " integer, "
                     + "foreign key" + " (" + KEY_RESTAURANT_HAVE_ID + ") references " + DATABASE_TABLE_RESTAURANT_NAME
-                    + " (" + KEY_ROWID + "), "
+                    + " (" + KEY_ROW_ID + "), "
                     + "foreign key" + " (" + KEY_LOCATIONS_HAVE_ID + ") references " + DATABASE_TABLE_LOCATIONS
-                    + " (" + KEY_ROWID + ") "
+                    + " (" + KEY_ROW_ID + ") "
                     + ");";
 
     private static final String DATABASE_CREATE_SERVERS_TABLE =
             "create table " + DATABASE_TABLE_SERVER
-                    +" (" + KEY_ROWID + " integer primary key autoincrement, "
+                    +" (" + KEY_ROW_ID + " integer primary key autoincrement, "
                     + KEY_SERVER_NAME + " string not null, "
-                    + KEY_SERVER_LOCATION + " string,"
-                    + "foreign key" + " (" + KEY_SERVER_LOCATION + ") references " + DATABASE_TABLE_LOCATIONS
-                    + " (" + KEY_ROWID + ") "
+                    + KEY_SERVER_REST_HAVE_LOCATION + " string,"
+                    + KEY_SERVER_SCORE + " real, "
+                    + KEY_SERVER_SCORE_COUNT + " integer, "
+                    + "foreign key" + " (" + KEY_SERVER_REST_HAVE_LOCATION + ") references " + DATABASE_TABLE_RESTAURANT_NAME
+                    + " (" + KEY_ROW_ID + ") "
                     + ");";
 
     // Context of application who uses us.
@@ -91,13 +96,18 @@ public class DBAdapter {
     }
 
     // Open the database connection.
-    public DBAdapter open() {
+    public DBAdapter openWrite() {
         db = myDBHelper.getWritableDatabase();
         return this;
     }
 
+    public DBAdapter openRead(){
+        db = myDBHelper.getReadableDatabase();
+        return this;
+    }
+
     // Close the database connection.
-    public void close() {
+    public void closeDB() {
         myDBHelper.close();
     }
 
@@ -108,7 +118,7 @@ public class DBAdapter {
     }
 
     public Cursor getRestID(String restName){
-        String getIDQuery = "SELECT " + KEY_ROWID + " FROM " + DATABASE_TABLE_RESTAURANT_NAME
+        String getIDQuery = "SELECT " + KEY_ROW_ID + " FROM " + DATABASE_TABLE_RESTAURANT_NAME
                 + " WHERE " + KEY_RESTAURANT_NAME + " = \"" + restName + "\";";
         Cursor c = db.rawQuery(getIDQuery,null);
         if (c != null){
@@ -134,7 +144,7 @@ public class DBAdapter {
     }
 
     public Cursor getLocaleID(String localeName){
-        String getIDQuery = "SELECT " + KEY_ROWID + " FROM " + DATABASE_TABLE_LOCATIONS
+        String getIDQuery = "SELECT " + KEY_ROW_ID + " FROM " + DATABASE_TABLE_LOCATIONS
                 + " WHERE " + KEY_RESTAURANT_LOCALE + " = \"" + localeName + "\";";
         Cursor c = db.rawQuery(getIDQuery,null);
         if (c != null){
@@ -159,14 +169,23 @@ public class DBAdapter {
         return db.insert(DATABASE_TABLE_SERVER,null,initialValues);
     }
 
-    public Cursor getAllServer(){
-        String serverQuery = "SELECT * FROM " + DATABASE_TABLE_SERVER + " ORDER BY "
+    public Cursor getAllServer(String restID, String localeID){
+        String serverQuery = "SELECT * FROM " + DATABASE_TABLE_SERVER
+                + " WHERE " + KEY_SERVER_REST_HAVE_LOCATION +
+                " ORDER BY "
                 + KEY_SERVER_NAME + " ASC";
         Cursor c = db.rawQuery(serverQuery,null);
         if (c != null){
             c.moveToFirst();
         }
         return c;
+    }
+
+    public Long insertRestIdLocaleID(String restID, String locationID ){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_RESTAURANT_HAVE_ID,restID);
+        initialValues.put(KEY_LOCATIONS_HAVE_ID,locationID);
+        return db.insert(DATABASE_TABLE_RESTAURANTS_HAVE_LOCATIONS,null,initialValues);
     }
 
 
