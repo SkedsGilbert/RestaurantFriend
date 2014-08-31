@@ -35,6 +35,8 @@ public class AddLocation extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
+
+        serverDB = new DBAdapter(this);
         addedRestName = (TextView) findViewById(R.id.nameRest);
         addLocationBttn = (Button) findViewById(R.id.addLocationBttn);
         addLocationListView = (ListView) findViewById(R.id.restLocationListView);
@@ -46,21 +48,21 @@ public class AddLocation extends Activity {
 
 
         setOnClick();
-        openDB();
         populateLocationListView();
     }
 
-    private void openDB(){
-        serverDB = new DBAdapter(this);
-        serverDB.open();
+    @Override
+    protected void onResume(){
+        super.onResume();
+        populateLocationListView();
     }
+
 
     private void setOnClick(){
         addLocationBttn.setOnClickListener(new Button.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                openDB();
 
                 LayoutInflater dialogInflater = LayoutInflater.from(mContext);
                 View dialogView = dialogInflater.inflate(R.layout.layout_add_rest_name_dialog,null);
@@ -77,8 +79,13 @@ public class AddLocation extends Activity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        serverDB.insertLocale(userInput.getText().toString());
                                         String localeName = userInput.getText().toString();
+                                        serverDB.openWrite();
+                                        serverDB.insertLocale(localeName);
+                                        serverDB.closeDB();
+//                                        serverDB.openWrite();
+//                                        serverDB.insertRestIdLocaleID(addedRestID,getLocaleID(localeName)); +++ causing issue
+//                                        serverDB.closeDB();
                                         startIntent(localeName);
                                     }
                                 })
@@ -101,36 +108,42 @@ public class AddLocation extends Activity {
                 TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
                 String name = temp.getText().toString();
                 startIntent(name);
-            }
-        });
+        }
+    });
 
-    }
+}
 
     private void populateLocationListView() {
+        serverDB.openRead();
         Cursor cursor = serverDB.getAllLocations();
-        startManagingCursor(cursor);
         String[] fromLocations = new String[]{DBAdapter.KEY_RESTAURANT_LOCALE};
         int[] toViewIDs = new int[]{R.id.restNameRowTextView};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromLocations,toViewIDs);
         ListView serverInfoListView = (ListView) findViewById(R.id.restLocationListView);
         serverInfoListView.setAdapter(myCursorAdapter);
+        serverDB.closeDB();
 
     }
 
     public void startIntent(String localeName){
-        String ID = "";
-        String localeString = localeName;
-        Cursor cursor = serverDB.getLocaleID(localeName);
-        if(cursor.moveToFirst()){
-            ID = cursor.getString(0);
-        }
-
+        String locale_ID = getLocaleID(localeName);
         Intent intent = new Intent(mContext,AddServer.class);
-        intent.putExtra("localeNamePassed",localeString);
-        intent.putExtra("localeIdPassed",ID);
+        intent.putExtra("localeNamePassed",localeName);
+        intent.putExtra("localeIdPassed",locale_ID);
         intent.putExtra("restNamePassed",restName);
         intent.putExtra("restIdPassed",addedRestID);
         startActivity(intent);
+    }
+
+    private String getLocaleID(String name){
+        String locale_ID = "";
+        serverDB.openRead();
+        Cursor cursor = serverDB.getLocaleID(name);
+        if (cursor.moveToFirst()){
+            locale_ID = cursor.getString(0);
+        }
+        serverDB.closeDB();
+        return locale_ID;
     }
 
 
