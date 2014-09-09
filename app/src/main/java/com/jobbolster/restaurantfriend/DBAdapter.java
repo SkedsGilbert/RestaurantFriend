@@ -163,17 +163,19 @@ public class DBAdapter {
         return c;
     }
 
-    public Long insertServer(String serverName){
+    public Long insertServer(String serverName, String restLocID){
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_SERVER_NAME,serverName);
+        initialValues.put(KEY_SERVER_REST_HAVE_LOCATION,restLocID);
+        initialValues.put(KEY_SERVER_SCORE,0.0);
+        initialValues.put(KEY_SERVER_SCORE_COUNT,0);
         return db.insert(DATABASE_TABLE_SERVER,null,initialValues);
     }
 
-    public Cursor getAllServer(String restID, String localeID){
+    public Cursor getAllServer(String restLocID){
         String serverQuery = "SELECT * FROM " + DATABASE_TABLE_SERVER
-                + " WHERE " + KEY_SERVER_REST_HAVE_LOCATION +
-                " ORDER BY "
-                + KEY_SERVER_NAME + " ASC";
+                + " WHERE " + KEY_SERVER_REST_HAVE_LOCATION + " = \"" + restLocID + "\""
+                + " ORDER BY " + KEY_SERVER_NAME + " ASC";
         Cursor c = db.rawQuery(serverQuery,null);
         if (c != null){
             c.moveToFirst();
@@ -186,6 +188,17 @@ public class DBAdapter {
         initialValues.put(KEY_RESTAURANT_HAVE_ID,restID);
         initialValues.put(KEY_LOCATIONS_HAVE_ID,locationID);
         return db.insert(DATABASE_TABLE_RESTAURANTS_HAVE_LOCATIONS,null,initialValues);
+    }
+
+    public Cursor getRestLocID(String restID, String locID){
+        String getIDsQuery = "SELECT " + KEY_ROW_ID + " FROM " + DATABASE_TABLE_RESTAURANTS_HAVE_LOCATIONS
+                + " WHERE " + KEY_RESTAURANT_HAVE_ID + " = \"" + restID + "\""
+                + " AND " + KEY_LOCATIONS_HAVE_ID + " = \"" + locID + "\";";
+        Cursor c = db.rawQuery(getIDsQuery,null);
+        if(c != null){
+            c.moveToFirst();
+        }
+        return c;
     }
 
 

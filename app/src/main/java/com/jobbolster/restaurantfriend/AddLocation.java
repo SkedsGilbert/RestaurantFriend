@@ -29,6 +29,8 @@ public class AddLocation extends Activity {
     TextView addedRestName;
     String addedRestID;
     String restName;
+    boolean isRestNameNew;
+    boolean isLocationNew;
 
 
     @Override
@@ -44,6 +46,7 @@ public class AddLocation extends Activity {
         Intent i = getIntent();
         restName = i.getStringExtra("restNamePassed");
         addedRestID = i.getStringExtra("restIdPassed");
+        isRestNameNew = i.getExtras().getBoolean("isRestNew");
         addedRestName.setText(restName + " ->");
 
 
@@ -82,10 +85,9 @@ public class AddLocation extends Activity {
                                         String localeName = userInput.getText().toString();
                                         serverDB.openWrite();
                                         serverDB.insertLocale(localeName);
+                                        addRestAndLocID(localeName);
                                         serverDB.closeDB();
-//                                        serverDB.openWrite();
-//                                        serverDB.insertRestIdLocaleID(addedRestID,getLocaleID(localeName)); +++ causing issue
-//                                        serverDB.closeDB();
+                                        isLocationNew = true;
                                         startIntent(localeName);
                                     }
                                 })
@@ -107,6 +109,7 @@ public class AddLocation extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
                 String name = temp.getText().toString();
+                isLocationNew = false;
                 startIntent(name);
         }
     });
@@ -126,6 +129,9 @@ public class AddLocation extends Activity {
     }
 
     public void startIntent(String localeName){
+        if (isRestNameNew == true && isLocationNew == false){
+            addRestAndLocID(localeName);
+        }
         String locale_ID = getLocaleID(localeName);
         Intent intent = new Intent(mContext,AddServer.class);
         intent.putExtra("localeNamePassed",localeName);
@@ -146,6 +152,12 @@ public class AddLocation extends Activity {
         return locale_ID;
     }
 
+    private void addRestAndLocID(String localeName){
+        String localeID = getLocaleID(localeName);
+        serverDB.openWrite();
+        serverDB.insertRestIdLocaleID(addedRestID,localeID);
+        serverDB.closeDB();
+    }
 
 
     @Override

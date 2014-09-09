@@ -32,6 +32,7 @@ public class AddServer extends Activity {
     String addedlocaleName;
     String addedRestName;
     String addedRestId;
+    String restLocID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,21 @@ public class AddServer extends Activity {
         addedlocaleName = i.getStringExtra("localeNamePassed");
         addedLocaleID = i.getStringExtra("localeIdPassed");
         addedLocaleNameTextView.setText(addedRestName + " --> " + addedlocaleName );
+        restLocID = getRestLocaleID();
 
         setOnclick();
         populateServerListView();
+    }
+
+    private String getRestLocaleID(){
+        String restLocID = "";
+        serverDB.openRead();
+        Cursor cursor = serverDB.getRestLocID(addedRestId,addedLocaleID);
+        if(cursor.moveToFirst()){
+            restLocID = cursor.getString(0);
+        }
+        serverDB.closeDB();
+        return restLocID;
     }
 
     @Override
@@ -80,8 +93,9 @@ public class AddServer extends Activity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         String name = userInput.getText().toString();
                                         serverDB.openWrite();
-                                        serverDB.insertServer(name);
+                                        serverDB.insertServer(name,restLocID);
                                         serverDB.closeDB();
+                                        populateServerListView();
 //                                      startIntent(name);
                                     }
                                 })
@@ -109,7 +123,7 @@ public class AddServer extends Activity {
 
     private void populateServerListView(){
         serverDB.openRead();
-        Cursor cursor = serverDB.getAllServer(addedRestId,addedLocaleID);
+        Cursor cursor = serverDB.getAllServer(restLocID);
         serverDB.closeDB();
         String[] fromServers = new String[]{DBAdapter.KEY_SERVER_NAME};
         int[] toViewIDs = new int[]{R.id.restNameRowTextView};
