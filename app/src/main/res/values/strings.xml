@@ -24,5 +24,9 @@
     <string name="dialogText">Enter Restaurant Name</string>
     <string name="title_activity_add_server">AddServer</string>
     <string name="addServerBttn">Add Server</string>
+    <string name="server_name">Server Name</string>
+    <string name="server_score_label">Server Score: </string>
+    <string name="serverNotesTextbox">Enter Server Notes</string>
+    <string name="addNotesBttn">Add Notes</string>
 
 </resources>

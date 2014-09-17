@@ -26,6 +26,7 @@ public class DBAdapter {
     //SERVER TABLE
     public static final String KEY_SERVER_NAME = "NAME";
     public static final String KEY_SERVER_REST_HAVE_LOCATION = "REST_HAVE_LOC_ID";
+    public static final String KEY_SERVER_NOTES = "NOTES";
     public static final String KEY_SERVER_SCORE = "SCORE";
     public static final String KEY_SERVER_SCORE_COUNT = "SCORE_COUNT";
 
@@ -76,6 +77,7 @@ public class DBAdapter {
                     + KEY_SERVER_REST_HAVE_LOCATION + " string,"
                     + KEY_SERVER_SCORE + " real, "
                     + KEY_SERVER_SCORE_COUNT + " integer, "
+                    + KEY_SERVER_NOTES + " text, "
                     + "foreign key" + " (" + KEY_SERVER_REST_HAVE_LOCATION + ") references " + DATABASE_TABLE_RESTAURANT_NAME
                     + " (" + KEY_ROW_ID + ") "
                     + ");";
@@ -195,6 +197,33 @@ public class DBAdapter {
                 + " WHERE " + KEY_RESTAURANT_HAVE_ID + " = \"" + restID + "\""
                 + " AND " + KEY_LOCATIONS_HAVE_ID + " = \"" + locID + "\";";
         Cursor c = db.rawQuery(getIDsQuery,null);
+        if(c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getServerScore(String id){
+        String getServerIDQuery = "SELECT " + KEY_SERVER_SCORE + " FROM " + DATABASE_TABLE_SERVER
+                + " WHERE " + KEY_ROW_ID + " = \"" + id +"\";";
+        Cursor c = db.rawQuery(getServerIDQuery,null);
+        if(c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public void updateServerNotes(String id, String notes){
+        String updateNotesQuery = "UPDATE " + DATABASE_TABLE_SERVER + " SET "
+                + KEY_SERVER_NOTES + " = \"" + notes + "\" WHERE " + KEY_ROW_ID + " = \""
+                + id +"\";";
+       db.execSQL(updateNotesQuery);
+    }
+
+    public Cursor getServerNotes(String id){
+        String getNotesQuery = "SELECT " + KEY_SERVER_NOTES + " FROM " + DATABASE_TABLE_SERVER
+                + " WHERE " + KEY_ROW_ID + " = \"" + id + "\";";
+        Cursor c = db.rawQuery(getNotesQuery,null);
         if(c != null){
             c.moveToFirst();
         }

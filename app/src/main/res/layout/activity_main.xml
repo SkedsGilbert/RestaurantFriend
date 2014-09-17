@@ -110,9 +110,65 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/finalBillAmountTextView"
+        android:layout_alignStart="@+id/finalBillAmountTextView" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/server_name"
+        android:id="@+id/serverNameTextView"
+        android:layout_marginTop="124dp"
+        android:layout_below="@+id/finalBillAmountTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.0    "
+        android:id="@+id/serverScoreTextView"
+        android:layout_toEndOf="@+id/tipTextView"
+        android:layout_alignTop="@+id/serverNameTextView"
+        android:layout_toRightOf="@+id/tipTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/server_score_label"
+        android:id="@+id/scoreLabelTextView"
+        android:layout_alignTop="@+id/serverScoreTextView"
+        android:layout_toRightOf="@+id/billEditText"
+        android:layout_toEndOf="@+id/billEditText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:id="@+id/serverNotesEditText"
+        android:textSize="14sp"
+        android:layout_below="@+id/serverNameTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/resetAllBttn"
+        android:layout_alignEnd="@+id/resetAllBttn"
+        android:layout_above="@+id/resetAllBttn"
+        android:background="#181818"
+        android:hint="@string/serverNotesTextbox"
+        android:gravity="top"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addNotesBttn"
+        android:id="@+id/addNotesBttn"
+        android:layout_below="@+id/serverNotesEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/resetAllBttn"
+        android:layout_toStartOf="@+id/resetAllBttn" />
 
 
 </RelativeLayout>

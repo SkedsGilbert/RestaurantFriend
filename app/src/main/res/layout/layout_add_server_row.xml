@@ -6,10 +6,18 @@
     android:id="@+id/addRestNameRow">
     
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/restNameRowTextView"
+        android:id="@+id/serverNameRowTextView"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="RestNameHolder" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/serverScoreRowTextView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="right"
+        android:text="0.0" />
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class AddServer extends Activity {
     String addedRestName;
     String addedRestId;
     String restLocID;
+    long serverID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,50 +95,53 @@ public class AddServer extends Activity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         String name = userInput.getText().toString();
                                         serverDB.openWrite();
-                                        serverDB.insertServer(name,restLocID);
+                                        serverID = serverDB.insertServer(name,restLocID);
                                         serverDB.closeDB();
-                                        populateServerListView();
-//                                      startIntent(name);
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.cancel();
-                                    }
-                                });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
+                                        String newText = String.valueOf(serverID);
+        populateServerListView();
+        startIntent(name,newText);
+    }
+})
+        .setNegativeButton("Cancel",
+        new DialogInterface.OnClickListener() {
+@Override
+public void onClick(DialogInterface dialogInterface, int i) {
+        dialogInterface.cancel();
+        }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        }
         });
 
         addServerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView temp = (TextView) view.findViewById(R.id.restNameRowTextView);
-                String name = temp.getText().toString();
-//                startIntent(name);
-            }
+@Override
+public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        String text = String.valueOf(l);
+        TextView temp = (TextView) view.findViewById(R.id.serverNameRowTextView);
+        String name = temp.getText().toString();
+        startIntent(name,text);
+        }
         });
-    }
+        }
 
-    private void populateServerListView(){
+private void populateServerListView(){
         serverDB.openRead();
         Cursor cursor = serverDB.getAllServer(restLocID);
         serverDB.closeDB();
-        String[] fromServers = new String[]{DBAdapter.KEY_SERVER_NAME};
-        int[] toViewIDs = new int[]{R.id.restNameRowTextView};
-        SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_rest_name_row,cursor,fromServers,toViewIDs);
+        String[] fromServers = new String[]{DBAdapter.KEY_SERVER_NAME,DBAdapter.KEY_SERVER_SCORE };
+        int[] toViewIDs = new int[]{R.id.serverNameRowTextView,R.id.serverScoreRowTextView};
+        SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(this,R.layout.layout_add_server_row,cursor,fromServers,toViewIDs);
         ListView serverInfoListView = (ListView) findViewById(R.id.serverListView);
         serverInfoListView.setAdapter(myCursorAdapter);
     }
 
-//    public void startIntent(String name){
-//        String ID = "";
-//        String nameString = wholeName + " -> " + name;
-//        Cursor cursor = serverDB.
-//    }
+    public void startIntent(String serverName, String serverID){
+        Intent intent = new Intent(mContext,MainActivity.class);
+        intent.putExtra("serverName",serverName);
+        intent.putExtra("serverID",serverID);
+        startActivity(intent);
+    }
 
 
     @Override
