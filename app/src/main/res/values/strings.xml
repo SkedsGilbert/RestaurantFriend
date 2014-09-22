@@ -19,10 +19,10 @@
     <string name="tip_cal_bttn">Use Tip Calculator</string>
     <string name="title_activity_add_restaurant">Select Restaurant</string>
     <string name="addRestaurantNameBttn">Add Restaurant</string>
-    <string name="title_activity_add_location">AddLocation</string>
+    <string name="title_activity_add_location">Add Location</string>
     <string name="addLocationBttn">Add Location</string>
     <string name="dialogText">Enter Restaurant Name</string>
-    <string name="title_activity_add_server">AddServer</string>
+    <string name="title_activity_add_server">Add Server</string>
     <string name="addServerBttn">Add Server</string>
     <string name="server_name">Server Name</string>
     <string name="server_score_label">Server Score: </string>

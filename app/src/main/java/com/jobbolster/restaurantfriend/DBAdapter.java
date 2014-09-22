@@ -220,6 +220,13 @@ public class DBAdapter {
        db.execSQL(updateNotesQuery);
     }
 
+    public void updateServerScore(String id, float rating){
+        String updateScoreQuery = "UPDATE " + DATABASE_TABLE_SERVER + " SET "
+                + KEY_SERVER_SCORE + " = \"" + rating + "\" WHERE " + KEY_ROW_ID + " = \""
+                + id +"\";";
+        db.execSQL(updateScoreQuery);
+    }
+
     public Cursor getServerNotes(String id){
         String getNotesQuery = "SELECT " + KEY_SERVER_NOTES + " FROM " + DATABASE_TABLE_SERVER
                 + " WHERE " + KEY_ROW_ID + " = \"" + id + "\";";

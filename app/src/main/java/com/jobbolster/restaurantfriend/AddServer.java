@@ -98,21 +98,21 @@ public class AddServer extends Activity {
                                         serverID = serverDB.insertServer(name,restLocID);
                                         serverDB.closeDB();
                                         String newText = String.valueOf(serverID);
-        populateServerListView();
-        startIntent(name,newText);
+                        populateServerListView();
+                        startIntent(name,newText);
     }
 })
-        .setNegativeButton("Cancel",
-        new DialogInterface.OnClickListener() {
-@Override
-public void onClick(DialogInterface dialogInterface, int i) {
-        dialogInterface.cancel();
-        }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-        }
-        });
+                        .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                }
+                });
 
         addServerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 @Override

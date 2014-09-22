@@ -1,18 +1,22 @@
 package com.jobbolster.restaurantfriend;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +33,7 @@ public class MainActivity extends Activity {
 
     EditText billBeforeTipEt;
     EditText serverNotesEt;
+    EditText serverNotesDialogET;
     TextView finalBillTv;
     TextView tipAmountTv;
     TextView tipPercentageTv;
@@ -55,7 +60,9 @@ public class MainActivity extends Activity {
         //setup edit text
         billBeforeTipEt = (EditText) findViewById(R.id.billEditText);
         billBeforeTipEt.addTextChangedListener(billBeforeTipListener);
-        serverNotesEt = (EditText) findViewById(R.id.serverNotesEditText);
+        serverNotesEt = (EditText) findViewById(R.id.serverNotesDisplayEditText);
+        serverNotesEt.setKeyListener(null);
+        serverNotesDialogET = (EditText) findViewById(R.id.serverNotesEditText);
         //setup Textview
         finalBillTv = (TextView) findViewById(R.id.finalBillAmountTextView);
         tipAmountTv = (TextView) findViewById(R.id.tipAmountTextView);
@@ -71,6 +78,8 @@ public class MainActivity extends Activity {
         addNotesBttn = (Button) findViewById(R.id.addNotesBttn);
         //setup seekbar
         adjustTipSb = (SeekBar) findViewById(R.id.tipSeekBar);
+
+        adjustTipSb.requestFocus();
         //setup listener
         setBttnOnClickListener();
         adjustTipSb.setOnSeekBarChangeListener(tipSeekBarListener);
@@ -80,9 +89,7 @@ public class MainActivity extends Activity {
     }
 
     private void checkMissingServer(){
-        Log.d("MyApp", "Inside checkMissingServer()");
         if(serverName == null || serverName.length() == 0 || serverName.isEmpty()){
-            Log.d("MyApp", "Inside the if statement");
             serverNameTv.setVisibility(View.GONE);
             serverScoreTv.setVisibility(View.GONE);
             scoreLabelTv.setVisibility(View.GONE);
@@ -124,7 +131,6 @@ public class MainActivity extends Activity {
                 billBeforeTip = 0.00;
             }
             updateTipFinalBill();
-
         }
 
         @Override
@@ -141,7 +147,6 @@ public class MainActivity extends Activity {
             System.out.println(tipAmount);
             tipPercentageTv.setText(Integer.toString(tipAmount));
             updateTipFinalBill();
-
         }
 
         @Override
@@ -159,7 +164,7 @@ public class MainActivity extends Activity {
 
     private void updateTipFinalBill() {
         double tipFromText = Double.parseDouble(tipPercentageTv.getText().toString()) *.01;
-         finalBill = billBeforeTip + (billBeforeTip * tipFromText);
+        finalBill = billBeforeTip + (billBeforeTip * tipFromText);
         double amountToTip = finalBill - billBeforeTip;
         tipAmountTv.setText(String.format("%.02f", amountToTip));
         finalBillTv.setText(String.format("%.02f",finalBill));
@@ -172,7 +177,6 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 billBeforeTipEt.setText(String.format("%.02f", 0.00));
                 adjustTipSb.setProgress(15);
-
             }
         });
 
@@ -180,15 +184,59 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                serverDB.openWrite();
-                serverDB.updateServerNotes(serverID,serverNotesEt.getText().toString());
-                serverDB.closeDB();
-                Toast.makeText(mContext,"Notes Saved",Toast.LENGTH_SHORT).show();
 
+                LayoutInflater dialogInflater = LayoutInflater.from(mContext);
+                View dialogView = dialogInflater.inflate(R.layout.layout_server_info_dialog,null);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+                alertDialogBuilder.setView(dialogView);
+
+            //Setup Textbox and rating bar
+                    final EditText userInput = (EditText) dialogView.findViewById(R.id.serverNotesEditText);
+                    serverDB.openRead();
+                    String notes = "";
+                    Cursor cursor = serverDB.getServerNotes(serverID);
+                        if(cursor.moveToFirst()){
+                            notes = cursor.getString(0);
+                        }
+                        if(notes != null) {
+                            userInput.setText(notes);
+                        }
+
+                    final RatingBar serverRating = (RatingBar) dialogView.findViewById(R.id.serverRatingBar);
+                        float stars = 0;
+                        Cursor getStarsCursor = serverDB.getServerScore(serverID);
+                            if(getStarsCursor.moveToFirst()){
+                                stars = Float.parseFloat(getStarsCursor.getString(0));
+                            }
+                    serverDB.closeDB();
+                    serverRating.setRating(stars);
+
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("Save",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        serverDB.openWrite();
+                                        serverDB.updateServerNotes(serverID, userInput.getText().toString());
+                                        serverDB.updateServerScore(serverID,serverRating.getRating());
+                                        serverDB.closeDB();
+                                        checkMissingServer();
+                                        Toast.makeText(mContext,"Notes Saved",Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
     }
-
 
 
     @Override

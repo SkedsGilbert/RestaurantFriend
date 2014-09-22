@@ -80,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/adjustTipTextView"
         android:layout_centerHorizontal="true"
+        android:focusableInTouchMode="true"
         android:progress="15" />
 
     <TextView
@@ -146,7 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:id="@+id/serverNotesEditText"
+        android:id="@+id/serverNotesDisplayEditText"
         android:textSize="14sp"
         android:layout_below="@+id/serverNameTextView"
         android:layout_alignParentLeft="true"
@@ -164,11 +165,10 @@
         android:layout_height="wrap_content"
         android:text="@string/addNotesBttn"
         android:id="@+id/addNotesBttn"
-        android:layout_below="@+id/serverNotesEditText"
+        android:layout_toStartOf="@+id/resetAllBttn"
+        android:layout_below="@+id/serverNotesDisplayEditText"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/resetAllBttn"
-        android:layout_toStartOf="@+id/resetAllBttn" />
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
