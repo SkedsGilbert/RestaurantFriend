@@ -104,6 +104,7 @@ public class MainActivity extends Activity {
             }
             serverDB.closeDB();
             serverNotesEt.setText(notes);
+            serverScoreTv.setText(getServerScore());
         }
     }
 
@@ -234,8 +235,12 @@ public class MainActivity extends Activity {
                                 });
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+
             }
         });
+    }
+
+    public void test(){
     }
 
 

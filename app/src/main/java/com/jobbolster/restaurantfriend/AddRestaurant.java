@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jobbolster.restaurantfriend.R;
 
@@ -61,12 +62,19 @@ public class AddRestaurant extends Activity {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                String name = userInput.getText().toString();
-                                                serverDB.openWrite();
-                                                serverDB.insertRestName(name);
-                                                serverDB.closeDB();
-                                                isNewRestName = true;
-                                                startIntent(name);
+                                                String name;
+                                                name = userInput.getText().toString();
+                                                if (name.isEmpty() || name.trim().equals("") ||
+                                                        name == null) {
+                                                        Toast.makeText(mContext,"Name cannot be blank"
+                                                        ,Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    serverDB.openWrite();
+                                                    serverDB.insertRestName(name);
+                                                    serverDB.closeDB();
+                                                    isNewRestName = true;
+                                                    startIntent(name);
+                                                }
                                             }
                                         })
                                 .setNegativeButton("Cancel",

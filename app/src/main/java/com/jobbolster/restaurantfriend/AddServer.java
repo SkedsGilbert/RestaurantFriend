@@ -94,21 +94,27 @@ public class AddServer extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         String name = userInput.getText().toString();
-                                        serverDB.openWrite();
-                                        serverID = serverDB.insertServer(name,restLocID);
-                                        serverDB.closeDB();
-                                        String newText = String.valueOf(serverID);
-                        populateServerListView();
-                        startIntent(name,newText);
-    }
-})
+                                        if (name.isEmpty() || name.trim().equals("") ||
+                                                name == null) {
+                                            Toast.makeText(mContext, "Server name cannot be blank"
+                                                    , Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            serverDB.openWrite();
+                                            serverID = serverDB.insertServer(name, restLocID);
+                                            serverDB.closeDB();
+                                            String newText = String.valueOf(serverID);
+                                            populateServerListView();
+                                            startIntent(name, newText);
+                                        }
+                                    }
+                                })
                         .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                        }
-                        });
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
                 }

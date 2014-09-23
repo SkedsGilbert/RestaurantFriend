@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class AddLocation extends Activity {
@@ -83,12 +84,18 @@ public class AddLocation extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         String localeName = userInput.getText().toString();
-                                        serverDB.openWrite();
-                                        serverDB.insertLocale(localeName);
-                                        addRestAndLocID(localeName);
-                                        serverDB.closeDB();
-                                        isLocationNew = true;
-                                        startIntent(localeName);
+                                        if (localeName.isEmpty() || localeName.trim().equals("")
+                                                || localeName == null) {
+                                            Toast.makeText(mContext, "Location cannot be blank"
+                                                    , Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            serverDB.openWrite();
+                                            serverDB.insertLocale(localeName);
+                                            addRestAndLocID(localeName);
+                                            serverDB.closeDB();
+                                            isLocationNew = true;
+                                            startIntent(localeName);
+                                        }
                                     }
                                 })
                         .setNegativeButton("Cancel",
