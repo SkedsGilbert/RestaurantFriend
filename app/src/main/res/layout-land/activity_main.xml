@@ -117,7 +117,7 @@
                         android:text="0.00"
                         android:id="@+id/finalBillAmountTextView"
                         android:textSize="20sp"
-                        android:paddingRight="20dp"
+                        android:paddingRight="21dp"
                         android:layout_gravity="right" />
                 </LinearLayout>
 
