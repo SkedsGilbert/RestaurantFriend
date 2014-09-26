@@ -30,7 +30,7 @@ public class AddServer extends Activity {
     ListView addServerListView;
     TextView addedLocaleNameTextView;
     String addedLocaleID;
-    String addedlocaleName;
+    String addedLocaleName;
     String addedRestName;
     String addedRestId;
     String restLocID;
@@ -49,9 +49,9 @@ public class AddServer extends Activity {
         Intent i = getIntent();
         addedRestName = i.getStringExtra("restNamePassed");
         addedRestId = i.getStringExtra("restIdPassed");
-        addedlocaleName = i.getStringExtra("localeNamePassed");
+        addedLocaleName = i.getStringExtra("localeNamePassed");
         addedLocaleID = i.getStringExtra("localeIdPassed");
-        addedLocaleNameTextView.setText(addedRestName + " --> " + addedlocaleName );
+        addedLocaleNameTextView.setText(addedRestName + " --> " + addedLocaleName );
         restLocID = getRestLocaleID();
 
         setOnclick();
