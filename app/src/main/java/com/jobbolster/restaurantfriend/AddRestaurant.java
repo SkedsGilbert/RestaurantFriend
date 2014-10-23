@@ -37,6 +37,7 @@ public class AddRestaurant extends Activity {
         serverDB = new DBAdapter(this);
         addRestNameBttn = (Button) findViewById(R.id.addRestaurantBttn);
         addRestListView = (ListView) findViewById(R.id.restNameListView);
+        addRestListView.setLongClickable(false);
 
         setOnClick();
         populateRestaurantNameListView();
@@ -54,11 +55,10 @@ public class AddRestaurant extends Activity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
                 alertDialogBuilder.setView(dialogView);
                 final EditText userInput = (EditText) dialogView.findViewById(R.id.addRestDialogUserInput);
-
-
+                alertDialogBuilder.setTitle(R.string.add_restaurant_dialog_title);
                 alertDialogBuilder
                                 .setCancelable(false)
-                                .setPositiveButton("Enter",
+                                .setPositiveButton(R.string.enter,
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -99,6 +99,34 @@ public class AddRestaurant extends Activity {
                 isNewRestName = false;
                 startIntent(name);
 
+            }
+        });
+
+        addRestListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder deleteAlertBuilder = new AlertDialog.Builder(mContext);
+                deleteAlertBuilder.setTitle(R.string.delete_restaurant_dialog_title);
+                deleteAlertBuilder.setMessage(R.string.delete_address_dialog)
+                        .setPositiveButton(R.string.set_delete,
+                                new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Toast.makeText(mContext, "LOOOONG CLICK"
+                                                ,Toast.LENGTH_SHORT).show();
+
+                                    }
+                                })
+                        .setNegativeButton(R.string.cancel,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                AlertDialog alertDialog = deleteAlertBuilder.create();
+                alertDialog.show();
+                return true;
             }
         });
     }

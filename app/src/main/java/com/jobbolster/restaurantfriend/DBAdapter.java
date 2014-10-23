@@ -16,6 +16,7 @@ public class DBAdapter {
 
     private static final String TAG = "DBAdapter";
     public static final String KEY_ROW_ID = "_id";
+    public static final String KEY_ACTIVE = "ACTIVE";
     //RESTAURANT TABLE
     public static final String KEY_RESTAURANT_NAME = "NAME";
     //LOCATIONS TABLE
@@ -49,8 +50,9 @@ public class DBAdapter {
 
     private static final String DATABASE_CREATE_RESTAURANT_TABLE =
             "create table " + DATABASE_TABLE_RESTAURANT_NAME
-                    + " ("+ KEY_ROW_ID +" integer primary key autoincrement, "
-                    + KEY_RESTAURANT_NAME +" string not null "
+                    + " ("+ KEY_ROW_ID + " integer primary key autoincrement, "
+                    + KEY_ACTIVE + " boolean default 'true', "
+                    + KEY_RESTAURANT_NAME + " string not null "
                     + ");";
 
     private static final String DATABASE_CREATE_LOCATIONS_TABLE =
@@ -130,8 +132,9 @@ public class DBAdapter {
     }
 
     public Cursor getAllRestName(){
-        String nameQuery = "SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME + " ORDER BY " +
-                KEY_RESTAURANT_NAME + " ASC";
+        String nameQuery = "SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME
+                +" WHERE " + KEY_ACTIVE + " = " + true
+                + " ORDER BY " + KEY_RESTAURANT_NAME + " ASC";
         Cursor c = db.rawQuery(nameQuery, null );
         if (c != null){
             c.moveToFirst();
