@@ -43,6 +43,11 @@ public class AddRestaurant extends Activity {
         populateRestaurantNameListView();
     }
 
+    protected void onRestart(){
+        super.onRestart();
+        populateRestaurantNameListView();
+    }
+
 
 
     private void setOnClick() {

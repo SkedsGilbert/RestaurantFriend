@@ -132,8 +132,9 @@ public class DBAdapter {
     }
 
     public Cursor getAllRestName(){
+        String isTrue = "true";
         String nameQuery = "SELECT * FROM " + DATABASE_TABLE_RESTAURANT_NAME
-                +" WHERE " + KEY_ACTIVE + " = " + true
+                +" WHERE " + KEY_ACTIVE + " =  \"" + isTrue + "\""
                 + " ORDER BY " + KEY_RESTAURANT_NAME + " ASC";
         Cursor c = db.rawQuery(nameQuery, null );
         if (c != null){
