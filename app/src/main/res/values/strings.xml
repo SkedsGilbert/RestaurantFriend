@@ -28,5 +28,15 @@
     <string name="server_score_label">Server Score: </string>
     <string name="serverNotesTextbox">Enter Server Notes</string>
     <string name="addNotesBttn">Add Notes</string>
+    <string name="delete_address_dialog">WARNING: This will delete all information associated
+    with this restaurant!</string>
+    <string name="set_delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_restaurant_dialog_title">Delete Restaurant</string>
+    <string name="add_restaurant_dialog_title">Add Restaurant</string>
+    <string name="enter">Enter</string>
+    <string name="menu_home_button">Home Page</string>
+    <string name="menu_tip_calculator">Tip Calculator</string>
+
 
 </resources>
