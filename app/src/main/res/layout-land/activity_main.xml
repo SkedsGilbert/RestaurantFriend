@@ -161,7 +161,7 @@
 
                 <EditText
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:inputType="textMultiLine"
                     android:id="@+id/serverNotesDisplayEditText"
                     android:textSize="14sp"
@@ -194,6 +194,7 @@
                 android:id="@+id/addNotesBttn" />
 
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -8,167 +8,198 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/billTextView"
-        android:id="@+id/billTextView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:weightSum="1">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/billEditText"
-        android:text="@string/billEditText"
-        android:inputType="numberDecimal"
-        android:ems="4"
-        android:layout_alignParentTop="true"
-        android:textSize="20sp"
-        android:selectAllOnFocus="true"
-        android:layout_toRightOf="@+id/billTextView" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/billTextView"
+                android:id="@+id/billTextView"
+                android:layout_marginEnd="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tipAmountText"
-        android:id="@+id/tipTextView"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/billEditText"
-        android:layout_marginLeft="77dp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/billEditText"
+                android:text="@string/billEditText"
+                android:inputType="numberDecimal"
+                android:ems="4"
+                android:textSize="20sp"
+                android:selectAllOnFocus="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/billEditText"
-        android:id="@+id/tipAmountTextView"
-        android:textSize="20sp"
-        android:layout_alignBottom="@+id/billEditText"
-        android:layout_toRightOf="@+id/tipTextView" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tipAmountText"
+                android:id="@+id/tipTextView"
+                android:layout_marginStart="77dp"
+                android:layout_marginEnd="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/adjustTipTextView"
-        android:id="@+id/adjustTipTextView"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/billEditText"
-        android:layout_alignParentLeft="true"
-        android:ems="4"
-        android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/billEditText"
+                android:id="@+id/tipAmountTextView"
+                android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="15"
-        android:id="@+id/tipPercentTextView"
-        android:layout_alignTop="@+id/adjustTipTextView"
-        android:layout_toRightOf="@+id/adjustTipTextView" />
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/percentSign"
-        android:id="@+id/percentTextView"
-        android:layout_alignTop="@+id/tipPercentTextView"
-        android:layout_toRightOf="@+id/tipPercentTextView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/adjustTipTextView"
+                android:id="@+id/adjustTipTextView"
+                android:ems="4" />
 
-    <SeekBar
-        android:id="@+id/tipSeekBar"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15"
+                android:id="@+id/tipPercentTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/percentSign"
+                android:id="@+id/percentTextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <SeekBar
+                android:id="@+id/tipSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/adjustTipTextView"
+                android:layout_centerHorizontal="true"
+                android:focusableInTouchMode="true"
+                android:progress="15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/finalBillText"
+                android:id="@+id/finalBillTextView"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:id="@+id/finalBillAmountTextView"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/server_name"
+                    android:id="@+id/serverNameTextView" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/server_score_label"
+                    android:id="@+id/scoreLabelTextView" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0    "
+                    android:layout_marginStart="7dp"
+                    android:id="@+id/serverScoreTextView" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="279dp"
+            android:orientation="vertical"
+            android:textAlignment="gravity"
+            android:layout_weight="0.11">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:inputType="textMultiLine"
+                android:id="@+id/serverNotesDisplayEditText"
+                android:textSize="14sp"
+                android:background="#181818"
+                android:gravity="top"
+                android:hint="@string/serverNotesTextbox"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/adjustTipTextView"
-        android:layout_centerHorizontal="true"
-        android:focusableInTouchMode="true"
-        android:progress="15" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/finalBillText"
-        android:id="@+id/finalBillTextView"
-        android:layout_below="@+id/tipSeekBar"
-        android:layout_alignLeft="@+id/tipTextView"
-        android:layout_alignStart="@+id/tipTextView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.00"
-        android:id="@+id/finalBillAmountTextView"
-        android:layout_below="@+id/finalBillTextView"
-        android:layout_alignLeft="@+id/finalBillTextView"
-        android:layout_alignStart="@+id/finalBillTextView"
-        android:textSize="20sp" />
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/resetAll"
-        android:id="@+id/resetAllBttn"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/finalBillAmountTextView"
-        android:layout_alignStart="@+id/finalBillAmountTextView" />
+        android:orientation="horizontal">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resetAll"
+            android:layout_weight="1"
+            android:id="@+id/resetAllBttn" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/server_name"
-        android:id="@+id/serverNameTextView"
-        android:layout_marginTop="124dp"
-        android:layout_below="@+id/finalBillAmountTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/addNotesBttn"
+            android:layout_weight="1"
+            android:id="@+id/addNotesBttn" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.0    "
-        android:id="@+id/serverScoreTextView"
-        android:layout_toEndOf="@+id/tipTextView"
-        android:layout_alignTop="@+id/serverNameTextView"
-        android:layout_toRightOf="@+id/tipTextView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/server_score_label"
-        android:id="@+id/scoreLabelTextView"
-        android:layout_alignTop="@+id/serverScoreTextView"
-        android:layout_toRightOf="@+id/billEditText"
-        android:layout_toEndOf="@+id/billEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:id="@+id/serverNotesDisplayEditText"
-        android:textSize="14sp"
-        android:layout_below="@+id/serverNameTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/resetAllBttn"
-        android:layout_alignEnd="@+id/resetAllBttn"
-        android:layout_above="@+id/resetAllBttn"
-        android:background="#181818"
-        android:hint="@string/serverNotesTextbox"
-        android:gravity="top"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/addNotesBttn"
-        android:id="@+id/addNotesBttn"
-        android:layout_toStartOf="@+id/resetAllBttn"
-        android:layout_below="@+id/serverNotesDisplayEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
+    </LinearLayout>
 
 </RelativeLayout>
