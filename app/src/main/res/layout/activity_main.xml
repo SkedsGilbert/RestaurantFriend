@@ -162,18 +162,19 @@
             android:layout_height="279dp"
             android:orientation="vertical"
             android:textAlignment="gravity"
-            android:layout_weight="0.11">
+            android:layout_weight="0.11"
+            android:weightSum="45">
 
             <EditText
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent"
+                android:layout_height="226dp"
                 android:inputType="textMultiLine"
                 android:id="@+id/serverNotesDisplayEditText"
                 android:textSize="14sp"
                 android:background="#181818"
                 android:gravity="top"
                 android:hint="@string/serverNotesTextbox"
-                />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -184,7 +185,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <Button
             android:layout_width="wrap_content"

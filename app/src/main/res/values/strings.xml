@@ -37,6 +37,11 @@
     <string name="enter">Enter</string>
     <string name="menu_home_button">Home Page</string>
     <string name="menu_tip_calculator">Tip Calculator</string>
+    <string name="dialog_title_delete_location">Delete Location</string>
+    <string name="dialog_message_delete_location">WARNING: This location will be deleted for all
+    restaurants!</string>
+    <string name="dialog_title_delete_server">Delete Server</string>
+    <string name="dialog_mssage_delete_server">WARNING: You will permanently delete this server!</string>
 
 
 </resources>

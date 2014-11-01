@@ -58,6 +58,7 @@ public class DBAdapter {
     private static final String DATABASE_CREATE_LOCATIONS_TABLE =
             "create table " + DATABASE_TABLE_LOCATIONS
                     +" (" + KEY_ROW_ID + " integer primary key autoincrement, "
+                    + KEY_ACTIVE + " boolean default 'true', "
                     + KEY_RESTAURANT_LOCALE + " string not null "
                     + ");";
 
@@ -75,6 +76,7 @@ public class DBAdapter {
     private static final String DATABASE_CREATE_SERVERS_TABLE =
             "create table " + DATABASE_TABLE_SERVER
                     +" (" + KEY_ROW_ID + " integer primary key autoincrement, "
+                    + KEY_ACTIVE + " boolean default 'true', "
                     + KEY_SERVER_NAME + " string not null, "
                     + KEY_SERVER_REST_HAVE_LOCATION + " string,"
                     + KEY_SERVER_SCORE + " real, "
@@ -115,6 +117,10 @@ public class DBAdapter {
         myDBHelper.close();
     }
 
+    /*
+     *Create, update and read methods for the Restaurant Name section
+     */
+
     public Long insertRestName(String restName){
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_RESTAURANT_NAME,restName);
@@ -143,6 +149,16 @@ public class DBAdapter {
         return c;
     }
 
+    public void updateRestName(int id){
+        Log.d("MyApp","In the updateRestName. Here is the id " + id);
+        String updateRestNameQuery = "Update " + DATABASE_TABLE_RESTAURANT_NAME +
+                " SET " +  KEY_ACTIVE + " = 'false' WHERE " + KEY_ROW_ID + " = " + id;
+        db.execSQL(updateRestNameQuery);
+    }
+
+    /*
+        Create, update and read methods for the Restaurant Location section
+     */
     public Long insertLocale(String locale){
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_RESTAURANT_LOCALE,locale);
@@ -160,14 +176,28 @@ public class DBAdapter {
     }
 
     public Cursor getAllLocations(){
-        String locationQuery = "SELECT * FROM " + DATABASE_TABLE_LOCATIONS + " ORDER BY "
-                + KEY_RESTAURANT_LOCALE + " ASC";
+        String isTrue = "true";
+        String locationQuery = "SELECT * FROM " + DATABASE_TABLE_LOCATIONS
+                + " WHERE " + KEY_ACTIVE + " = \"" + isTrue + "\""
+                + " ORDER BY " + KEY_RESTAURANT_LOCALE + " ASC";
         Cursor c = db.rawQuery(locationQuery,null);
         if (c != null){
             c.moveToFirst();
         }
         return c;
     }
+
+    public void updateRestLocation(int id) {
+        Log.d("MyApp", "In the updateRestName. Here is the id " + id);
+        String updateLocationQuery = "Update " + DATABASE_TABLE_LOCATIONS +
+                " SET " + KEY_ACTIVE + " = 'false' WHERE " + KEY_ROW_ID + " = " + id;
+        db.execSQL(updateLocationQuery);
+    }
+
+    /*
+        Create, update and read methods for the Restaurant Server section
+        includes updating server notes and score.
+     */
 
     public Long insertServer(String serverName, String restLocID){
         ContentValues initialValues = new ContentValues();
@@ -179,8 +209,10 @@ public class DBAdapter {
     }
 
     public Cursor getAllServer(String restLocID){
+        String isTrue = "true";
         String serverQuery = "SELECT * FROM " + DATABASE_TABLE_SERVER
                 + " WHERE " + KEY_SERVER_REST_HAVE_LOCATION + " = \"" + restLocID + "\""
+                + " AND " + KEY_ACTIVE + " = \"" + isTrue + "\""
                 + " ORDER BY " + KEY_SERVER_NAME + " ASC";
         Cursor c = db.rawQuery(serverQuery,null);
         if (c != null){
@@ -239,6 +271,13 @@ public class DBAdapter {
             c.moveToFirst();
         }
         return c;
+    }
+
+    public void updateServer(int id) {
+        Log.d("MyApp", "In the updateRestName. Here is the id " + id);
+        String updateServerQuery = "Update " + DATABASE_TABLE_SERVER +
+                " SET " + KEY_ACTIVE + " = 'false' WHERE " + KEY_ROW_ID + " = " + id;
+        db.execSQL(updateServerQuery);
     }
 
 

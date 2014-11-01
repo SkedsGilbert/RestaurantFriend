@@ -123,13 +123,43 @@ public class AddServer extends Activity {
         addServerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 @Override
 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String text = String.valueOf(l);
-        TextView temp = (TextView) view.findViewById(R.id.serverNameRowTextView);
-        String name = temp.getText().toString();
-        startIntent(name,text);
-        }
+            String text = String.valueOf(l);
+            TextView temp = (TextView) view.findViewById(R.id.serverNameRowTextView);
+            String name = temp.getText().toString();
+            startIntent(name,text);
+            }
+            });
+
+        addServerListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int intConverted = (int)(long) l;
+                AlertDialog.Builder deleteServerBuilder = new AlertDialog.Builder(mContext);
+                deleteServerBuilder.setTitle(R.string.dialog_title_delete_server);
+                deleteServerBuilder.setMessage(R.string.dialog_mssage_delete_server)
+                        .setPositiveButton(R.string.set_delete,
+                                new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        serverDB.openWrite();
+                                        serverDB.updateServer(intConverted);
+                                        serverDB.closeDB();
+                                        populateServerListView();
+                                    }
+                                })
+                        .setNegativeButton(R.string.cancel,
+                                new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                AlertDialog alertDialog = deleteServerBuilder.create();
+                alertDialog.show();
+                return true;
+            }
         });
-        }
+    }
 
 private void populateServerListView(){
         serverDB.openRead();

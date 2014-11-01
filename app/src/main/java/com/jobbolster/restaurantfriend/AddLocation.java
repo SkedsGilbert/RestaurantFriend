@@ -118,8 +118,39 @@ public class AddLocation extends Activity {
                 String name = temp.getText().toString();
                 isLocationNew = false;
                 startIntent(name);
-        }
-    });
+            }
+        });
+
+        addLocationListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int intConverted = (int) (long) l;
+                AlertDialog.Builder deleteLocationBuilder = new AlertDialog.Builder(mContext);
+                deleteLocationBuilder.setTitle(getString(R.string.dialog_title_delete_location));
+                deleteLocationBuilder.setMessage(R.string.dialog_message_delete_location)
+                        .setPositiveButton(R.string.set_delete,
+                                new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        serverDB.openWrite();
+                                        serverDB.updateRestLocation(intConverted);
+                                        serverDB.closeDB();
+                                        populateLocationListView();
+                                    }
+                                })
+                        .setNegativeButton(R.string.cancel,
+                                new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                AlertDialog alertDialog = deleteLocationBuilder.create();
+                alertDialog.show();
+                return true;
+            }
+        });
 
 }
 

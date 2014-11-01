@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -110,6 +111,8 @@ public class AddRestaurant extends Activity {
         addRestListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final String buttonClicked = Long.toString(l);
+                final int intConverted = (int) (long) l;
                 AlertDialog.Builder deleteAlertBuilder = new AlertDialog.Builder(mContext);
                 deleteAlertBuilder.setTitle(R.string.delete_restaurant_dialog_title);
                 deleteAlertBuilder.setMessage(R.string.delete_address_dialog)
@@ -117,9 +120,11 @@ public class AddRestaurant extends Activity {
                                 new DialogInterface.OnClickListener(){
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(mContext, "LOOOONG CLICK"
-                                                ,Toast.LENGTH_SHORT).show();
-
+                                        serverDB.openWrite();
+                                        Log.d("MyApp","Going into the updateRestName.");
+                                        serverDB.updateRestName(intConverted);
+                                        serverDB.closeDB();
+                                        populateRestaurantNameListView();
                                     }
                                 })
                         .setNegativeButton(R.string.cancel,
