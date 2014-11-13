@@ -201,7 +201,7 @@ public class AddLocation extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.add_location, menu);
         return true;
     }
 
@@ -218,10 +218,12 @@ public class AddLocation extends Activity {
             case R.id.home_page:
                 Intent i = new Intent(mContext,StarterActivity.class);
                 startActivity(i);
+                return true;
 
             case R.id.tip_calculator:
                 Intent iTipCal = new Intent(mContext,MainActivity.class);
                 startActivity(iTipCal);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

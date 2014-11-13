@@ -183,7 +183,7 @@ private void populateServerListView(){
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.add_server, menu);
         return true;
     }
 
@@ -200,10 +200,12 @@ private void populateServerListView(){
             case R.id.home_page:
                 Intent iHomePage = new Intent(mContext,StarterActivity.class);
                 startActivity(iHomePage);
+                return true;
 
             case R.id.tip_calculator:
                 Intent iTipCal = new Intent(mContext,MainActivity.class);
                 startActivity(iTipCal);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

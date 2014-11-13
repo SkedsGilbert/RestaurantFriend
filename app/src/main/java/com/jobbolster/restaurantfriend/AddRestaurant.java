@@ -188,7 +188,7 @@ public class AddRestaurant extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.add_restaurant, menu);
         return true;
     }
 
@@ -203,12 +203,16 @@ public class AddRestaurant extends Activity {
                 return true;
 
             case R.id.home_page:
+                Log.d("MyApp","In home method");
                 Intent i = new Intent(mContext,StarterActivity.class);
                 startActivity(i);
+                return true;
 
             case R.id.tip_calculator:
+                Log.d("MyApp","In tipCal method");
                 Intent iTipCal = new Intent(mContext,MainActivity.class);
                 startActivity(iTipCal);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

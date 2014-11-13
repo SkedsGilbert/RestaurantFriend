@@ -240,9 +240,6 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void test(){
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -264,6 +261,7 @@ public class MainActivity extends Activity {
             case R.id.home_page:
                 Intent i = new Intent(mContext,StarterActivity.class);
                 startActivity(i);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
