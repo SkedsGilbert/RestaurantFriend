@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,15 +28,19 @@ public class MainActivity extends Activity {
     private double billBeforeTip;
     private int tipAmount;
     private double finalBill;
+    private int split_bill_amount;
     String serverName = "";
     String serverID = "";
     Context mContext = this;
 
     EditText billBeforeTipEt;
+    EditText split_bill_editText;
     EditText serverNotesEt;
     EditText serverNotesDialogET;
     TextView finalBillTv;
     TextView tipAmountTv;
+    TextView splitAmountTotalTv;
+    TextView splitAmountTotalLabelTv;
     TextView tipPercentageTv;
     TextView serverNameTv;
     TextView serverScoreTv;
@@ -60,6 +65,9 @@ public class MainActivity extends Activity {
         //setup edit text
         billBeforeTipEt = (EditText) findViewById(R.id.billEditText);
         billBeforeTipEt.addTextChangedListener(billBeforeTipListener);
+        split_bill_editText = (EditText) findViewById(R.id.split_editText);
+        split_bill_editText.addTextChangedListener(splitBillListener);
+
         serverNotesEt = (EditText) findViewById(R.id.serverNotesDisplayEditText);
         serverNotesEt.setKeyListener(null);
         serverNotesDialogET = (EditText) findViewById(R.id.serverNotesEditText);
@@ -72,14 +80,16 @@ public class MainActivity extends Activity {
         scoreLabelTv = (TextView) findViewById(R.id.scoreLabelTextView);
         serverNameTv.setText(serverName);
         serverScoreTv.setText(getServerScore());
+        splitAmountTotalTv = (TextView) findViewById(R.id.split_total_amount_textView);
+        splitAmountTotalLabelTv = (TextView) findViewById(R.id.scoreLabelTextView);
 
         //setup buttons
         resetBttn = (Button) findViewById(R.id.resetAllBttn);
         addNotesBttn = (Button) findViewById(R.id.addNotesBttn);
         //setup seekbar
         adjustTipSb = (SeekBar) findViewById(R.id.tipSeekBar);
-
         adjustTipSb.requestFocus();
+
         //setup listener
         setBttnOnClickListener();
         adjustTipSb.setOnSeekBarChangeListener(tipSeekBarListener);
@@ -121,9 +131,7 @@ public class MainActivity extends Activity {
     private TextWatcher billBeforeTipListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
         }
-
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             try{
@@ -133,10 +141,29 @@ public class MainActivity extends Activity {
             }
             updateTipFinalBill();
         }
-
         @Override
         public void afterTextChanged(Editable editable) {
 
+        }
+    };
+
+    private TextWatcher splitBillListener = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            try {
+                split_bill_amount = Integer.parseInt(charSequence.toString());
+                updateSplitAmount();
+            } catch (NumberFormatException e) {
+                split_bill_amount = 0;
+                Toast.makeText(mContext,"Invalid Number",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+        @Override
+        public void afterTextChanged(Editable editable) {
         }
     };
 
@@ -148,20 +175,15 @@ public class MainActivity extends Activity {
             System.out.println(tipAmount);
             tipPercentageTv.setText(Integer.toString(tipAmount));
             updateTipFinalBill();
+            updateSplitAmount();
         }
-
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
         }
-
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
         }
     };
-
-
 
     private void updateTipFinalBill() {
         double tipFromText = Double.parseDouble(tipPercentageTv.getText().toString()) *.01;
@@ -171,12 +193,21 @@ public class MainActivity extends Activity {
         finalBillTv.setText(String.format("%.02f",finalBill));
     }
 
+    private void updateSplitAmount(){
+        int numberToSplit = Integer.parseInt(split_bill_editText.getText().toString());
+        double splitTotal = finalBill/numberToSplit;
+        splitAmountTotalTv.setText(String.format("%.02f",splitTotal));
+    }
+
     private void setBttnOnClickListener(){
         resetBttn.setOnClickListener(new Button.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 billBeforeTipEt.setText(String.format("%.02f", 0.00));
+                split_bill_editText.setText("0");
+                splitAmountTotalTv.setVisibility(View.INVISIBLE);
+                splitAmountTotalLabelTv.setVisibility(View.INVISIBLE);
                 adjustTipSb.setProgress(15);
             }
         });
@@ -191,7 +222,7 @@ public class MainActivity extends Activity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
                 alertDialogBuilder.setView(dialogView);
 
-            //Setup Textbox and rating bar
+                    //Setup Textbox and rating bar
                     final EditText userInput = (EditText) dialogView.findViewById(R.id.serverNotesEditText);
                     serverDB.openRead();
                     String notes = "";

@@ -42,6 +42,9 @@
     restaurants!</string>
     <string name="dialog_title_delete_server">Delete Server</string>
     <string name="dialog_mssage_delete_server">WARNING: You will permanently delete this server!</string>
+    <string name="split_amount_textView">Split</string>
+    <string name="split_total_textView">Split Total</string>
+    <string name="split_total_amount_textView">0.00</string>
 
 
 </resources>
