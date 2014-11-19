@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private int tipAmount;
     private double finalBill;
     private int split_bill_amount;
+    private static final String SAVED_SPLIT_AMOUNT = "savedAmount";
     String serverName = "";
     String serverID = "";
     Context mContext = this;
@@ -55,7 +56,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            String savedSplitAmount = savedInstanceState.getString(SAVED_SPLIT_AMOUNT);
+            Log.d("MyApp",savedSplitAmount + " inside the savedInstanceState");
+            try {
+                splitAmountTotalTv.setText(String.format("%.02f",savedSplitAmount));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         setContentView(R.layout.activity_main);
+
         serverDB = new DBAdapter(this);
         //extract intent info
         Intent i = getIntent();
@@ -81,6 +92,7 @@ public class MainActivity extends Activity {
         serverNameTv.setText(serverName);
         serverScoreTv.setText(getServerScore());
         splitAmountTotalTv = (TextView) findViewById(R.id.split_total_amount_textView);
+        splitAmountTotalTv.setText("0.00");
         splitAmountTotalLabelTv = (TextView) findViewById(R.id.scoreLabelTextView);
 
         //setup buttons
@@ -97,6 +109,12 @@ public class MainActivity extends Activity {
         checkMissingServer();
 
     }
+
+    public void onSaveInstanceState(Bundle outState){
+        outState.putString(SAVED_SPLIT_AMOUNT,splitAmountTotalTv.getText().toString());
+        Log.d("MyApp",splitAmountTotalTv.getText().toString() + " in onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+}
 
     private void checkMissingServer(){
         if(serverName == null || serverName.length() == 0 || serverName.isEmpty()){
@@ -137,7 +155,7 @@ public class MainActivity extends Activity {
             try{
                 billBeforeTip = Double.parseDouble(charSequence.toString());
             }catch (NumberFormatException nfe){
-                billBeforeTip = 0.00;
+                billBeforeTip = 0;
             }
             updateTipFinalBill();
         }
@@ -154,11 +172,19 @@ public class MainActivity extends Activity {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             try {
-                split_bill_amount = Integer.parseInt(charSequence.toString());
-                updateSplitAmount();
+                if (charSequence.toString().isEmpty()){
+                    Log.d("MyApp", "charSequence is empty");
+                    split_bill_editText.setText("0");
+                    splitAmountTotalTv.setText("0.00");
+                }else{
+                    split_bill_amount = Integer.parseInt(charSequence.toString());
+                    updateSplitAmount();
+                }
+
             } catch (NumberFormatException e) {
                 split_bill_amount = 0;
                 Toast.makeText(mContext,"Invalid Number",Toast.LENGTH_LONG).show();
+                Log.d("MyApp", "NumberFormatException");
                 e.printStackTrace();
             }
         }
@@ -196,6 +222,9 @@ public class MainActivity extends Activity {
     private void updateSplitAmount(){
         int numberToSplit = Integer.parseInt(split_bill_editText.getText().toString());
         double splitTotal = finalBill/numberToSplit;
+        if (Double.isNaN(splitTotal)){
+            splitTotal = 0.00;
+        }
         splitAmountTotalTv.setText(String.format("%.02f",splitTotal));
     }
 
